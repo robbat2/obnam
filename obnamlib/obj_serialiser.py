@@ -147,9 +147,14 @@ def _next_object(pos, length):
 
 def _serialise_dict(obj):
     keys = obj.keys()
+    int_keys = [key for key in keys if type(obj[key]) in (int, long)]
     str_keys = [key for key in keys if type(obj[key]) is str]
-    other_keys = [key for key in keys if key not in str_keys]
+    special_keys = set(int_keys).union(set(str_keys))
+    other_keys = [key for key in keys if key not in special_keys]
+
     parts = []
+    parts.append(_serialise_str_list(int_keys))
+    parts.append(_serialise_int_list([obj[key] for key in int_keys]))
     parts.append(_serialise_str_list(str_keys))
     parts.append(_serialise_str_list([obj[key] for key in str_keys]))
     parts.append(_serialise_str_list(other_keys))
@@ -163,6 +168,10 @@ def _serialise_dict(obj):
 def _deserialise_dict(serialised):
     result = {}
     pos = 0
+
+    int_keys, pos = _deserialise_str_list(serialised, pos)
+    int_values, pos = _deserialise_int_list(serialised, pos)
+    result.update(zip(int_keys, int_values))
 
     str_keys, pos = _deserialise_str_list(serialised, pos)
     str_values, pos = _deserialise_str_list(serialised, pos)
@@ -192,6 +201,16 @@ def _deserialise_str_list(serialised, pos):
         strings.append(serialised[pos:pos+lengths[i]])
         pos += lengths[i]
     return strings, pos
+
+
+def _serialise_int_list(ints):
+    return _serialise_str_list([str(i) for i in ints])
+
+
+def _deserialise_int_list(serialised, pos):
+    strings, pos = _deserialise_str_list(serialised, pos)
+    ints = [int(s) for s in strings]
+    return ints, pos
 
 
 def _deserialise_prefix(serialised, pos):
