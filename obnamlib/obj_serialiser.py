@@ -146,20 +146,52 @@ def _next_object(pos, length):
 # Dicts.
 
 def _serialise_dict(obj):
-    pairs = ''.join(
-        _serialise_str(key) + serialise_object(value)
-        for key, value in obj.iteritems())
-    return _DICT + _serialise_length(len(pairs)) + pairs
+    keys = obj.keys()
+    str_keys = [key for key in keys if type(obj[key]) is str]
+    other_keys = [key for key in keys if key not in str_keys]
+    parts = []
+    parts.append(_serialise_str_list(str_keys))
+    parts.append(_serialise_str_list([obj[key] for key in str_keys]))
+    parts.append(_serialise_str_list(other_keys))
+    for key in other_keys:
+        parts.append(serialise_object(obj[key]))
+
+    encoded = ''.join(parts)
+    return _DICT + _serialise_length(len(encoded)) + encoded
 
 
 def _deserialise_dict(serialised):
     result = {}
     pos = 0
-    while pos < len(serialised):
-        key, pos = _deserialise_prefix(serialised, pos)
+
+    str_keys, pos = _deserialise_str_list(serialised, pos)
+    str_values, pos = _deserialise_str_list(serialised, pos)
+    result.update(zip(str_keys, str_values))
+
+    other_keys, pos = _deserialise_str_list(serialised, pos)
+    for key in other_keys:
         value, pos = _deserialise_prefix(serialised, pos)
         result[key] = value
+
     return result
+
+
+def _serialise_str_list(strings):
+    n = len(strings)
+    encoded_lengths = struct.pack('!' + 'Q' * n, *[len(s) for s in strings])
+    return _serialise_integer(n) + encoded_lengths + ''.join(strings)
+
+
+def _deserialise_str_list(serialised, pos):
+    n, pos = _deserialise_prefix(serialised, pos)
+    int_size = struct.calcsize('!Q')
+    lengths = struct.unpack('!' + 'Q' * n, serialised[pos:pos + n*int_size])
+    pos += n * int_size
+    strings = []
+    for i in range(n):
+        strings.append(serialised[pos:pos+lengths[i]])
+        pos += lengths[i]
+    return strings, pos
 
 
 def _deserialise_prefix(serialised, pos):
