@@ -264,10 +264,13 @@ class GAClient(object):
 
     def get_metadata_from_file_keys(self, gen_number, filename):
         self._load_data()
-        self._require_file_exists(gen_number, filename)
-
         generation = self._lookup_generation_by_gen_number(gen_number)
         metadata_obj = generation.get_file_metadata()
+        if not metadata_obj.file_exists(filename):
+            raise obnamlib.RepositoryFileDoesNotExistInGeneration(
+                client_name=self._client_name,
+                genspec=gen_number,
+                filename=filename)
         return metadata_obj.get_metadata_from_file_keys(filename)
 
     def set_file_key(self, gen_number, filename, key, value):
