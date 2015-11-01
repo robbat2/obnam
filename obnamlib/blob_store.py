@@ -26,7 +26,7 @@ class BlobStore(object):
         self._bag = None
         self._max_bag_size = 0
         self._cached_blobs = BlobCache()
-        self._cached_blobs.set_max_bytes(0)
+        self._cached_blobs.set_max_bytes(2**24)
 
     def set_bag_store(self, bag_store):
         self._bag_store = bag_store
