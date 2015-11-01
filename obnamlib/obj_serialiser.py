@@ -187,13 +187,16 @@ def _deserialise_dict(serialised):
 
 def _serialise_str_list(strings):
     n = len(strings)
+    encoded_n = struct.pack('!Q', n)
     encoded_lengths = struct.pack('!' + 'Q' * n, *[len(s) for s in strings])
-    return _serialise_integer(n) + encoded_lengths + ''.join(strings)
+    return encoded_n + encoded_lengths + ''.join(strings)
 
 
 def _deserialise_str_list(serialised, pos):
-    n, pos = _deserialise_prefix(serialised, pos)
     int_size = struct.calcsize('!Q')
+    n = struct.unpack('!Q', serialised[pos:pos+int_size])[0]
+    pos += int_size
+
     lengths = struct.unpack('!' + 'Q' * n, serialised[pos:pos + n*int_size])
     pos += n * int_size
     strings = []
