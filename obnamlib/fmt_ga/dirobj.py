@@ -37,6 +37,9 @@ class GADirectory(object):
     def as_dict(self):
         return self._dict
 
+    def set_from_dict(self, a_dict):
+        self._dict = a_dict
+
     def add_file(self, basename):
         self._require_mutable()
         self._dict['metadata'][basename] = {
@@ -98,10 +101,5 @@ class GAImmutableError(obnamlib.ObnamError):
 
 def create_gadirectory_from_dict(a_dict):
     dir_obj = GADirectory()
-    for basename in a_dict['metadata']:
-        dir_obj.add_file(basename)
-        for key, value in a_dict['metadata'][basename].items():
-            dir_obj.set_file_key(basename, key, value)
-    for subdir, obj_id in a_dict['subdirs'].items():
-        dir_obj.add_subdir(subdir, obj_id)
+    dir_obj.set_from_dict(a_dict)
     return dir_obj
