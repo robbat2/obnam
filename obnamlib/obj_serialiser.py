@@ -147,9 +147,8 @@ def _next_object(pos, length):
 
 def _serialise_dict(obj):
     keys = obj.keys()
-    int_keys = [key for key in keys
-                if isinstance(obj[key], int) or isinstance(obj[key], long)]
-    str_keys = [key for key in keys if isinstance(obj[key], str)]
+    int_keys = [key for key in keys if type(obj[key]) in (int, long)]
+    str_keys = [key for key in keys if type(obj[key]) is str]
     special_keys = set(int_keys).union(set(str_keys))
     other_keys = [key for key in keys if key not in special_keys]
 
