@@ -243,10 +243,10 @@ class BackupPlugin(obnamlib.ObnamPlugin):
     def finish_generation(self):
         prefix = 'committing changes to repository: '
 
-        self.progress.what(prefix + 'locking shared B-trees')
+        self.progress.what(prefix + 'locking shared chunk indexes')
         self.repo.lock_chunk_indexes()
 
-        self.progress.what(prefix + 'adding chunks to shared B-trees')
+        self.progress.what(prefix + 'adding chunks to shared chunk indexes')
         self.add_chunks_to_shared()
 
         self.progress.what(prefix + 'updating generation metadata')
@@ -268,7 +268,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
         self.repo.commit_client(self.client_name)
         self.repo.unlock_client(self.client_name)
 
-        self.progress.what(prefix + 'committing shared B-trees')
+        self.progress.what(prefix + 'committing shared chunk indexes')
         self.repo.commit_chunk_indexes()
         self.repo.unlock_chunk_indexes()
 
@@ -290,7 +290,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
         self.repo.commit_client(self.client_name)
         self.repo.unlock_client(self.client_name)
 
-        self.progress.what(prefix + ': commiting shared B-trees')
+        self.progress.what(prefix + ': commiting shared chunk indexes')
         self.repo.commit_chunk_indexes()
         self.repo.unlock_chunk_indexes()
 
@@ -515,15 +515,16 @@ class BackupPlugin(obnamlib.ObnamPlugin):
             self.progress.what('making checkpoint: backing up parents')
             self.backup_parents('.')
 
-            self.progress.what('making checkpoint: locking shared B-trees')
+            self.progress.what(
+                'making checkpoint: locking shared chunk indexes')
             self.repo.lock_chunk_indexes()
 
             self.progress.what(
-                'making checkpoint: adding chunks to shared B-trees')
+                'making checkpoint: adding chunks to shared chunk indexes')
             self.add_chunks_to_shared()
 
             self.progress.what(
-                'making checkpoint: committing per-client B-tree')
+                'making checkpoint: committing per-client data')
             self.repo.set_generation_key(
                 self.new_generation,
                 obnamlib.REPO_GENERATION_IS_CHECKPOINT, 1)
@@ -531,7 +532,8 @@ class BackupPlugin(obnamlib.ObnamPlugin):
             self.repo.commit_client(self.client_name)
             self.repo.unlock_client(self.client_name)
 
-            self.progress.what('making checkpoint: committing shared B-trees')
+            self.progress.what(
+                'making checkpoint: committing shared chunk indexes')
             self.repo.commit_chunk_indexes()
             self.repo.unlock_chunk_indexes()
             self.last_checkpoint = self.repo.get_fs().bytes_written
