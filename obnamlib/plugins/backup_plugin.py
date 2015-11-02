@@ -119,10 +119,8 @@ class BackupPlugin(obnamlib.ObnamPlugin):
 
         self.app.settings.boolean(
             ['small-files-in-btree'],
-            'put contents of small files directly into '
-            'the per-client B-tree, instead of '
-            'separate chunk files; do not use this '
-            'as it is quite bad for performance',
+            'this is available only for backwards compatibility; '
+            'do not use it, and remove it from your configuration',
             group=backup_group)
 
         # Performance related settings.
