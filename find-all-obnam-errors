@@ -75,11 +75,18 @@ template = '''\
 {id} ({class_name}): {msg}
 '''
 
+error_classes = set()
 for module in set(all_modules):
     for error_class in get_obnam_errors(module):
-        e = error_class()
-        print template.format(
-            class_name=error_class.__name__,
-            id=e.id,
-            msg=e.msg,
-        ),
+        error_classes.add(error_class)
+
+def class_name(error_class):
+    return error_class.__name__
+
+for error_class in sorted(error_classes, key=class_name):
+    e = error_class()
+    print template.format(
+        class_name=class_name(error_class),
+        id=e.id,
+        msg=e.msg,
+    ),
