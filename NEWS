@@ -8,13 +8,24 @@ development, called `green-albatross`. It is **NOT** meant for real
 use. It is likely to change in incompatible ways without warning. Do
 not use it unless you're willing to lose your backup.
 
-Version 1.18, released UNRELEASED
+Version 1.18, released 2015-11-04
 ---------------------------------
+
+Bug fixes:
 
 * William Boughton fixed parsing for sftp URLs with IPv6 addresses.
   Previously, `sftp://[::1]` would be interpreted by Obnam as an
   address `[` followed by the port `:1]`, but now it is correctly
   interpreted as the adddress `::1` and no explicit port.
+
+* Ian Campbell fixed a bug in the kdirstat plugin, improving the
+  handling of unknown file types.
+
+* Lars Wirzenius changed the `scan_tree` code to not be recursive, to
+  avoid problems with directory trees that are deeper than Python's
+  call stack limit allows.
+
+Minor changes:
 
 * Lars Wirzenius added support for a multiline progress message during
   backup. Version 0.24 or newer of `ttystatus` is needed for this, but
@@ -24,20 +35,8 @@ Version 1.18, released UNRELEASED
 * Ben Boeckel added the `--gnupghome` setting so that Obnam can be
   configured to use a separate GnuPG (gpg) configuration directory.
 
-* Ian Campbell fixed a bug in the kdirstat plugin, improving the
-  handling of unknown file types.
-
 * Henri Sivonen improved the compression code to not compress if the
   result would be larger.
-
-* Lars Wirzenius changed the `scan_tree` code to not be recursive, to
-  avoid problems with directory trees that are deeper than Python's
-  call stack limit allows.
-
-* Lars Wirzenius made the `RepositoryFS` class be explicit in what
-  filesystem operations it supports for repositories, rather than
-  supporting everything. This makes future changes and adding
-  non-filesystem (e.g., object store) support later easier to do.
 
 Version 1.17, released 2015-09-12
 ---------------------------------
