@@ -305,7 +305,8 @@ class BackupPlugin(obnamlib.ObnamPlugin):
 
         self.progress.clear()
         self.progress.finish()
-        self.progress.report_stats(self.app.output, self.repo.get_fs())
+        self.progress.report_stats(
+            self.app.output, self.repo.get_fs(), self.app.settings['quiet'])
 
         logging.info('Backup finished.')
         self.app.hooks.call('backup-finished', args, self.progress)

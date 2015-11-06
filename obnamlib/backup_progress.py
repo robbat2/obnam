@@ -93,7 +93,7 @@ class BackupProgress(object):
     def update_progress_with_removed_checkpoint(self, gen):
         self._ts['checkpoint'] = gen
 
-    def report_stats(self, output, fs):
+    def report_stats(self, output, fs, quiet):
         duration = time.time() - self.started
         duration_string = obnamlib.humanise_duration(duration)
 
@@ -147,27 +147,30 @@ class BackupProgress(object):
         scanned_amount, scanned_unit = obnamlib.humanise_size(
             self.scanned_bytes)
 
-        output.write(
-            'Backed up %d files (of %d found), containing %.1f %s.\n' %
-            (self.backed_up_count,
-             self.file_count,
-             scanned_amount,
-             scanned_unit))
-        output.write(
-            'Uploaded %.1f %s file data in %s at %.1f %s average speed.\n' %
-            (chunk_amount,
-             chunk_unit,
-             duration_string,
-             speed_amount,
-             speed_unit))
-        output.write(
-            'Total download amount %.1f %s.\n' %
-            (dl_amount,
-             dl_unit))
-        output.write(
-            'Total upload amount %.1f %s. Overhead was %.1f %s (%.1f %%).\n' %
-            (ul_amount,
-             ul_unit,
-             overhead_amount,
-             overhead_unit,
-             overhead_percent))
+        if not quiet:
+            output.write(
+                'Backed up %d files (of %d found), containing %.1f %s.\n' %
+                (self.backed_up_count,
+                 self.file_count,
+                 scanned_amount,
+                 scanned_unit))
+            output.write(
+                'Uploaded %.1f %s file data in %s at %.1f %s '
+                'average speed.\n' %
+                (chunk_amount,
+                 chunk_unit,
+                 duration_string,
+                 speed_amount,
+                 speed_unit))
+            output.write(
+                'Total download amount %.1f %s.\n' %
+                (dl_amount,
+                 dl_unit))
+            output.write(
+                'Total upload amount %.1f %s. '
+                'Overhead was %.1f %s (%.1f %%).\n' %
+                (ul_amount,
+                 ul_unit,
+                 overhead_amount,
+                 overhead_unit,
+                 overhead_percent))
