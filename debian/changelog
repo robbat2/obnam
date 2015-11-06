@@ -1,3 +1,9 @@
+obnam (1.18.1-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Lars Wirzenius <liw@liw.fi>  Fri, 06 Nov 2015 11:52:58 +0000
+
 obnam (1.18-1) unstable; urgency=medium
 
   * New upstream version.
