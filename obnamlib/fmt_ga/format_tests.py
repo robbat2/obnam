@@ -16,6 +16,7 @@
 # =*= License: GPL-3+ =*=
 
 
+import shutil
 import tempfile
 import time
 
@@ -36,3 +37,6 @@ class RepositoryFormatGATests(obnamlib.RepositoryInterfaceTests):
             hooks=self.hooks,
             current_time=time.time)
         self.repo.set_fs(fs)
+
+    def tearDown(self):
+        shutil.rmtree(self.tempdir)
