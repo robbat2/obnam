@@ -133,6 +133,7 @@ class Check(Command):
     user_options = [
         ('unit-tests', 'u', 'run unit tests?'),
         ('yarns', 'y', 'run yarn tests locally?'),
+        ('all-yarns', 'Y', 'run ALL yarn tests (require ASSUMING)?'),
         ('lock-tests', 'l', 'run lock tests locally?'),
         ('network-lock-tests', 'L', 'run lock tests against localhost?'),
         ('crash-tests', 'c', 'run crash tests?'),
@@ -143,6 +144,7 @@ class Check(Command):
     def set_all_options(self, new_value):
         self.unit_tests = new_value
         self.yarns = new_value
+        self.all_yarns = new_value
         self.lock_tests = new_value
         self.network_lock_tests = new_value
         self.crash_tests = new_value
@@ -156,6 +158,7 @@ class Check(Command):
         any_set = (
             self.unit_tests or
             self.yarns or
+            self.all_yarns or
             self.lock_tests or
             self.network_lock_tests or
             self.crash_tests or
@@ -168,7 +171,7 @@ class Check(Command):
         if self.unit_tests:
             self.run_unit_tests()
 
-        if self.yarns and got_yarn:
+        if (self.yarns or self.all_yarns) and got_yarn:
             self.run_yarn()
 
         num_clients = '2'
@@ -211,10 +214,11 @@ class Check(Command):
 
     def run_yarn_for_repo_format(self, repo_format):
         print 'run yarn for repository format %s' % repo_format
-        runcmd(
-            ['yarn', '-s', 'yarns/obnam.sh'] +
-            ['--env', 'REPOSITORY_FORMAT=' + repo_format] +
-            glob.glob('yarns/*.yarn'))
+        argv = ['yarn', '-s', 'yarns/obnam.sh',
+                '--env', 'REPOSITORY_FORMAT=' + repo_format]
+        if self.all_yarns:
+            argv.append('--require-assumptions')
+        runcmd(argv + glob.glob('yarns/*.yarn'))
 
     def run_lock_test(self, num_clients, num_generations):
         print "run local locking tests"
