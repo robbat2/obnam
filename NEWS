@@ -20,6 +20,8 @@ Bug fixes:
   in the output of `obnam ls`. To fix that, remove any generations
   made with Obnam 1.18 or 1.18.1.
 
+  This will affect other exclusions as well.
+
 Version 1.18.1, released 2015-11-06
 ---------------------------------
 
