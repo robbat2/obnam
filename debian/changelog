@@ -1,3 +1,11 @@
+obnam (1.18.2-1) UNRELEASED; urgency=medium
+
+  * New upstream release. Closes:
+    - "Does not skip directories containing a CACHEDIR.TAG file"
+      (Closes: #804375)
+
+ -- Lars Wirzenius <liw@liw.fi>  Sun, 15 Nov 2015 21:28:32 +0200
+
 obnam (1.18.1-1) unstable; urgency=medium
 
   * New upstream release.
