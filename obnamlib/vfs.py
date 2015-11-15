@@ -333,7 +333,8 @@ class VirtualFileSystem(object):
             if isinstance(metadata, BaseException):
                 error_handler(filename, metadata)
             elif stat.S_ISDIR(metadata.st_mode) and not processed_dir:
-                items = process_dir(filename, metadata, items)
+                if ok(filename, metadata):
+                    items = process_dir(filename, metadata, items)
             elif ok(filename, metadata):
                 yield filename, metadata
 
@@ -737,7 +738,7 @@ class VfsTests(object):  # pragma: no cover
         self.assertEqual(self.fs.bytes_written, 3)
 
     def set_up_scan_tree(self):
-        self.dirs = ['foo', 'foo/bar', 'foobar']
+        self.dirs = ['foo', 'foo/bar', 'foo/bar/subway', 'foobar']
         self.dirs = [os.path.join(self.basepath, x) for x in self.dirs]
         for dirname in self.dirs:
             self.fs.mkdir(dirname)
@@ -775,3 +776,15 @@ class VfsTests(object):  # pragma: no cover
         result = list(self.fs.scan_tree(self.basepath, ok=ok))
         pathnames = [pathname for pathname, _ in result]
         self.assertEqual(sorted(pathnames), sorted(self.dirs))
+
+    def test_scan_tree_filters_away_unwanted_subdirs(self):
+        def ok(pathname, st):
+            return not pathname.endswith('bar')
+        self.set_up_scan_tree()
+        result = list(self.fs.scan_tree(self.basepath, ok=ok))
+        pathnames = [pathname for pathname, _ in result]
+        self.assertEqual(
+            sorted(pathnames),
+            sorted([self.basepath] +
+                   [os.path.join(self.basepath, x)
+                    for x in ['foo', 'symfoo']]))
