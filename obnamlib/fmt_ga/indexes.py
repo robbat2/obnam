@@ -87,6 +87,7 @@ class GAChunkIndexes(object):
 
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
+        self._prepare_data()
         if 'index' in self._data:
             token = self.prepare_chunk_for_indexes(chunk_content)
             result = [
