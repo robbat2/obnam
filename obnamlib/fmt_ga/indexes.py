@@ -44,7 +44,6 @@ class GAChunkIndexes(object):
 
     def commit(self):
         self._load_data()
-        self._prepare_data()
         self._save_data()
 
     def _save_data(self):
@@ -60,7 +59,6 @@ class GAChunkIndexes(object):
 
     def put_chunk_into_indexes(self, chunk_id, token, client_id):
         self._load_data()
-        self._prepare_data()
         self._data['index'].append({
             'chunk-id': chunk_id,
             'sha512': token,
@@ -75,19 +73,13 @@ class GAChunkIndexes(object):
                 self._data = obnamlib.deserialise_object(blob)
                 assert self._data is not None
             else:
-                self._data = {}
+                self._data = {
+                    'index': [],
+                }
             self._data_is_loaded = True
-
-    def _prepare_data(self):
-        if len(self._data) == 0:
-            empty = {
-                'index': [],
-            }
-            self._data = empty.copy()
 
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
-        self._prepare_data()
         if 'index' in self._data:
             token = self.prepare_chunk_for_indexes(chunk_content)
             result = [
@@ -103,8 +95,6 @@ class GAChunkIndexes(object):
 
     def remove_chunk_from_indexes(self, chunk_id, client_id):
         self._load_data()
-        self._prepare_data()
-
         self._data['index'] = self._filter_out(
             self._data['index'],
             lambda x:
@@ -115,8 +105,6 @@ class GAChunkIndexes(object):
 
     def remove_chunk_from_indexes_for_all_clients(self, chunk_id):
         self._load_data()
-        self._prepare_data()
-
         self._data['index'] = self._filter_out(
             self._data['index'],
             lambda x: x['chunk-id'] == chunk_id)
