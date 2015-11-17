@@ -59,11 +59,21 @@ class GAChunkIndexes(object):
 
     def put_chunk_into_indexes(self, chunk_id, token, client_id):
         self._load_data()
-        self._data['index'].append({
-            'chunk-id': chunk_id,
-            'sha512': token,
-            'client-id': client_id,
-        })
+
+        by_chunk_id = self._data['by_chunk_id']
+        by_chunk_id[chunk_id] = token
+
+        by_checksum = self._data['by_checksum']['sha512']
+        chunk_ids = by_checksum.get(token, [])
+        if chunk_id not in chunk_ids:
+            chunk_ids.append(chunk_id)
+            by_checksum[token] = chunk_ids
+
+        used_by = self._data['used_by']
+        client_ids = used_by.get(chunk_id, [])
+        if client_id not in client_ids:
+            client_ids.append(client_id)
+            used_by[chunk_id] = client_ids
 
     def _load_data(self):
         if not self._data_is_loaded:
@@ -74,35 +84,76 @@ class GAChunkIndexes(object):
                 assert self._data is not None
             else:
                 self._data = {
-                    'index': [],
+                    'by_chunk_id': {
+                    },
+                    'by_checksum': {
+                        'sha512': {},
+                    },
+                    'used_by': {
+                    },
                 }
             self._data_is_loaded = True
 
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
+
         token = self.prepare_chunk_for_indexes(chunk_content)
-        result = [record['chunk-id']
-                  for record in self._data['index']
-                  if record['sha512'] == token]
+        by_checksum = self._data['by_checksum']['sha512']
+        result = by_checksum.get(token, [])
+
         if not result:
             raise obnamlib.RepositoryChunkContentNotInIndexes()
         return result
 
     def remove_chunk_from_indexes(self, chunk_id, client_id):
         self._load_data()
-        self._data['index'] = self._filter_out(
-            self._data['index'],
-            lambda x:
-            x['chunk-id'] == chunk_id and x['client-id'] == client_id)
 
-    def _filter_out(self, records, pred):
-        return [record for record in records if not pred(record)]
+        used_by = self._data['used_by']
+        client_ids = used_by.get(chunk_id, [])
+        if client_id in client_ids:
+            client_ids.remove(client_id)
+            if client_ids:
+                used_by[chunk_id] = client_ids
+                still_used = True
+            else:
+                del used_by[chunk_id]
+                still_used = False
+
+        if not still_used:
+            by_chunk_id = self._data['by_chunk_id']
+            token = by_chunk_id.get(chunk_id, None)
+            if token is not None:
+                del by_chunk_id[chunk_id]
+
+            by_checksum = self._data['by_checksum']['sha512']
+            chunk_ids = by_checksum.get(token, [])
+            if chunk_id in chunk_ids:
+                chunk_ids.remove(chunk_id)
+                if chunk_ids:
+                    by_checksum[token] = chunk_ids
+                else:
+                    del by_checksum[token]
 
     def remove_chunk_from_indexes_for_all_clients(self, chunk_id):
         self._load_data()
-        self._data['index'] = self._filter_out(
-            self._data['index'],
-            lambda x: x['chunk-id'] == chunk_id)
+
+        by_chunk_id = self._data['by_chunk_id']
+        token = by_chunk_id.get(chunk_id, None)
+        if token is not None:
+            del by_chunk_id[chunk_id]
+
+        by_checksum = self._data['by_checksum']['sha512']
+        chunk_ids = by_checksum.get(token, [])
+        if chunk_id in chunk_ids:
+            chunk_ids.remove(chunk_id)
+            if chunk_ids:
+                by_checksum[token] = chunk_ids
+            else:
+                del by_checksum[token]
+
+        used_by = self._data['used_by']
+        if chunk_id in used_by:
+            del used_by[chunk_id]
 
     def validate_chunk_content(self, chunk_id):
         return None
