@@ -78,8 +78,11 @@ class GAChunkIndexes(object):
             self._data_is_loaded = True
 
     def _prepare_data(self):
-        if 'index' not in self._data:
-            self._data['index'] = []
+        if len(self._data) == 0:
+            empty = {
+                'index': [],
+            }
+            self._data = empty.copy()
 
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
