@@ -44,6 +44,7 @@ class GAChunkIndexes(object):
 
     def commit(self):
         self._load_data()
+        self._prepare_data()
         self._save_data()
 
     def _save_data(self):
