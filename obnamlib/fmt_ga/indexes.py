@@ -80,15 +80,10 @@ class GAChunkIndexes(object):
 
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
-        if 'index' in self._data:
-            token = self.prepare_chunk_for_indexes(chunk_content)
-            result = [
-                record['chunk-id']
-                for record in self._data['index']
-                if record['sha512'] == token]
-        else:
-            result = []
-
+        token = self.prepare_chunk_for_indexes(chunk_content)
+        result = [record['chunk-id']
+                  for record in self._data['index']
+                  if record['sha512'] == token]
         if not result:
             raise obnamlib.RepositoryChunkContentNotInIndexes()
         return result
