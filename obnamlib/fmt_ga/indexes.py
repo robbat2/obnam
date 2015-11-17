@@ -51,20 +51,6 @@ class GAChunkIndexes(object):
         filename = self._get_filename()
         self._fs.overwrite_file(filename, blob)
 
-    def _get_filename(self):
-        return os.path.join(self.get_dirname(), 'data.dat')
-
-    def prepare_chunk_for_indexes(self, chunk_content):
-        return hashlib.sha512(chunk_content).hexdigest()
-
-    def put_chunk_into_indexes(self, chunk_id, token, client_id):
-        self._load_data()
-        self._data['index'].append({
-            'chunk-id': chunk_id,
-            'sha512': token,
-            'client-id': client_id,
-        })
-
     def _load_data(self):
         if not self._data_is_loaded:
             filename = self._get_filename()
@@ -74,20 +60,46 @@ class GAChunkIndexes(object):
                 assert self._data is not None
             else:
                 self._data = {
-                    'index': [],
+                    'by_chunk_id': {
+                    },
+                    'by_checksum': {
+                        'sha512': {},
+                    },
+                    'used_by': {
+                    },
                 }
             self._data_is_loaded = True
 
+    def _get_filename(self):
+        return os.path.join(self.get_dirname(), 'data.dat')
+
+    def prepare_chunk_for_indexes(self, chunk_content):
+        return hashlib.sha512(chunk_content).hexdigest()
+
+    def put_chunk_into_indexes(self, chunk_id, token, client_id):
+        self._load_data()
+
+        by_chunk_id = self._data['by_chunk_id']
+        by_chunk_id[chunk_id] = token
+
+        by_checksum = self._data['by_checksum']['sha512']
+        chunk_ids = by_checksum.get(token, [])
+        if chunk_id not in chunk_ids:
+            chunk_ids.append(chunk_id)
+            by_checksum[token] = chunk_ids
+
+        used_by = self._data['used_by']
+        client_ids = used_by.get(chunk_id, [])
+        if client_id not in client_ids:
+            client_ids.append(client_id)
+            used_by[chunk_id] = client_ids
+
     def find_chunk_ids_by_content(self, chunk_content):
         self._load_data()
-        if 'index' in self._data:
-            token = self.prepare_chunk_for_indexes(chunk_content)
-            result = [
-                record['chunk-id']
-                for record in self._data['index']
-                if record['sha512'] == token]
-        else:
-            result = []
+
+        token = self.prepare_chunk_for_indexes(chunk_content)
+        by_checksum = self._data['by_checksum']['sha512']
+        result = by_checksum.get(token, [])
 
         if not result:
             raise obnamlib.RepositoryChunkContentNotInIndexes()
@@ -95,19 +107,47 @@ class GAChunkIndexes(object):
 
     def remove_chunk_from_indexes(self, chunk_id, client_id):
         self._load_data()
-        self._data['index'] = self._filter_out(
-            self._data['index'],
-            lambda x:
-            x['chunk-id'] == chunk_id and x['client-id'] == client_id)
-
-    def _filter_out(self, records, pred):
-        return [record for record in records if not pred(record)]
+        if not self._remove_used_by(chunk_id, client_id):
+            token = self._remove_chunk_by_id(chunk_id)
+            self._remove_chunk_by_checksum(chunk_id, token)
 
     def remove_chunk_from_indexes_for_all_clients(self, chunk_id):
         self._load_data()
-        self._data['index'] = self._filter_out(
-            self._data['index'],
-            lambda x: x['chunk-id'] == chunk_id)
+        token = self._remove_chunk_by_id(chunk_id)
+        self._remove_chunk_by_checksum(chunk_id, token)
+        self._remove_all_used_by(chunk_id)
+
+    def _remove_used_by(self, chunk_id, client_id):
+        still_used = False
+        used_by = self._data['used_by']
+        client_ids = used_by.get(chunk_id, [])
+        if client_id in client_ids:
+            client_ids.remove(client_id)
+            if client_ids:
+                still_used = True
+            else:
+                del used_by[chunk_id]
+        return still_used
+
+    def _remove_chunk_by_id(self, chunk_id):
+        by_chunk_id = self._data['by_chunk_id']
+        token = by_chunk_id.get(chunk_id, None)
+        if token is not None:
+            del by_chunk_id[chunk_id]
+        return token
+
+    def _remove_chunk_by_checksum(self, chunk_id, token):
+        by_checksum = self._data['by_checksum']['sha512']
+        chunk_ids = by_checksum.get(token, [])
+        if chunk_id in chunk_ids:
+            chunk_ids.remove(chunk_id)
+            if not chunk_ids:
+                del by_checksum[token]
+
+    def _remove_all_used_by(self, chunk_id):
+        used_by = self._data['used_by']
+        if chunk_id in used_by:
+            del used_by[chunk_id]
 
     def validate_chunk_content(self, chunk_id):
         return None
