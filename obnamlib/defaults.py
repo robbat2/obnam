@@ -26,7 +26,7 @@ DEFAULT_NAGIOS_CRIT_AGE = '8d'
 
 _MEBIBYTE = 1024**2
 DEFAULT_DIR_OBJECT_CACHE_BYTES = 256 * _MEBIBYTE
-DEFAULT_CHUNK_CACHE_BYTES = 1 * _MEBIBYTE
+DEFAULT_CHUNK_CACHE_BYTES = 16 * _MEBIBYTE
 
 # The following values have been determined empirically on a laptop
 # with an encrypted ext4 filesystem. Other values might be better for
