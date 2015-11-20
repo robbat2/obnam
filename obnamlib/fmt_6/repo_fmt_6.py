@@ -812,8 +812,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             self._chunksums.remove_for_all_clients(checksum, chunk_id)
             self._chunklist.remove(chunk_id)
 
-    def find_chunk_ids_by_content(self, data):
-        checksum = self._checksum(data)
+    def find_chunk_ids_by_token(self, checksum):
         candidates = self._chunksums.find(checksum)
         if candidates:
             return candidates

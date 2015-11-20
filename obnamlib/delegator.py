@@ -350,8 +350,8 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
         return self._chunk_indexes.put_chunk_into_indexes(
             chunk_id, token, client_id)
 
-    def find_chunk_ids_by_content(self, chunk_content):
-        return self._chunk_indexes.find_chunk_ids_by_content(chunk_content)
+    def find_chunk_ids_by_token(self, token):
+        return self._chunk_indexes.find_chunk_ids_by_token(token)
 
     def remove_chunk_from_indexes(self, chunk_id, client_id):
         self._require_we_got_chunk_indexes_lock()

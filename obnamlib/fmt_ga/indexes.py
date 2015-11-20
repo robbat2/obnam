@@ -94,10 +94,9 @@ class GAChunkIndexes(object):
             client_ids.append(client_id)
             used_by[chunk_id] = client_ids
 
-    def find_chunk_ids_by_content(self, chunk_content):
+    def find_chunk_ids_by_token(self, token):
         self._load_data()
 
-        token = self.prepare_chunk_for_indexes(chunk_content)
         by_checksum = self._data['by_checksum']['sha512']
         result = by_checksum.get(token, [])
 
