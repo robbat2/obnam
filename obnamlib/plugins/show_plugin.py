@@ -333,8 +333,9 @@ class ShowPlugin(obnamlib.ObnamPlugin):
             # Files are both present and neither is a directory.
             # Compare md5
             def get_md5(gen_id):
-                return self.repo.get_file_key(
-                    gen_id, fullname, obnamlib.REPO_FILE_MD5)
+                if obnamlib.REPO_FILE_MD5 in self.repo.get_allowed_file_keys():
+                    return self.repo.get_file_key(
+                        gen_id, fullname, obnamlib.REPO_FILE_MD5)
             md5_1 = get_md5(gen_id1)
             md5_2 = get_md5(gen_id2)
             if md5_1 != md5_2:
