@@ -243,6 +243,7 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
         if key not in self.get_allowed_file_keys():
             raise obnamlib.RepositoryFileKeyNotAllowed(
                 client_name=generation_id.client_name,
+                key_name=obnamlib.repo_key_name(key),
                 format=self.format)
 
         client = self._lookup_client_by_generation(generation_id)
@@ -252,6 +253,7 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
         if key not in self.get_allowed_file_keys():
             raise obnamlib.RepositoryFileKeyNotAllowed(
                 client_name=generation_id.client_name,
+                key_name=obnamlib.repo_key_name(key),
                 format=self.format)
 
         self._require_got_client_lock(generation_id.client_name)
