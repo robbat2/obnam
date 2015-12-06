@@ -443,8 +443,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
 
         self.backup_metadata(pathname, metadata)
         if stat.S_ISREG(metadata.st_mode):
-            assert metadata.md5 is None
-            metadata.md5 = self.backup_file_contents(pathname, metadata)
+            self.backup_file_contents(pathname, metadata)
         self.backup_metadata(pathname, metadata)
 
     def open_fs(self, root_url):
@@ -708,7 +707,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
     def backup_file_contents(self, filename, metadata):
         '''Back up contents of a regular file.
 
-        Return MD5 checksum of file's complete data.
+        Sets the whole-file MD5 checksum in metadata as a side effect.
 
         '''
 
@@ -759,7 +758,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
         self.app.dump_memory_profile('at end of file content backup for %s' %
                                      filename)
         tracing.trace('done backing up file contents')
-        return summer.digest()
+        metadata.md5 = summer.digest()
 
     def backup_file_chunk(self, data):
         '''Back up a chunk of data by putting it into the repository.'''
