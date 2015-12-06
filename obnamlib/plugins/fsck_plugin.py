@@ -80,10 +80,11 @@ class CheckFile(WorkItem):
             for chunkid in chunkids:
                 yield CheckChunk(chunkid, checksummer)
             if not self.settings['fsck-skip-checksums']:
-                md5 = self.repo.get_file_key(
-                    self.genid, self.filename, obnamlib.REPO_FILE_MD5)
-                yield CheckFileChecksum(
-                    self.name, md5, chunkids, checksummer)
+                if obnamlib.REPO_FILE_MD5 in self.repo.get_allowed_file_keys():
+                    md5 = self.repo.get_file_key(
+                        self.genid, self.filename, obnamlib.REPO_FILE_MD5)
+                    yield CheckFileChecksum(
+                        self.name, md5, chunkids, checksummer)
 
 
 class CheckDirectory(WorkItem):
