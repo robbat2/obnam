@@ -25,6 +25,7 @@ class GAChunkStore(object):
         self._fs = None
         self._dirname = 'chunk-store'
         self._max_chunk_size = None
+        self._chunk_cache_size = obnamlib.DEFAULT_CHUNK_CACHE_BYTES
         self._bag_store = None
         self._blob_store = None
 
@@ -35,8 +36,7 @@ class GAChunkStore(object):
         self._bag_store.set_location(fs, self._dirname)
         self._blob_store = obnamlib.BlobStore()
         self._blob_store.set_bag_store(self._bag_store)
-        self._blob_store.set_max_cache_bytes(
-            obnamlib.DEFAULT_CHUNK_CACHE_BYTES)
+        self._blob_store.set_max_cache_bytes(self._chunk_cache_size)
         if self._max_chunk_size is not None:
             self._blob_store.set_max_bag_size(self._max_chunk_size)
 
@@ -44,6 +44,11 @@ class GAChunkStore(object):
         self._max_chunk_size = max_chunk_size
         if self._blob_store:
             self._blob_store.set_max_bag_size(max_chunk_size)
+
+    def set_chunk_cache_size(self, chunk_cache_size):
+        self._chunk_cache_size = chunk_cache_size
+        if self._blob_store:
+            self._blob_store.set_max_cache_bytes(chunk_cache_size)
 
     def put_chunk_content(self, content):
         self._fs.create_and_init_toplevel(self._dirname)

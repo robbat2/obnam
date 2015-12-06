@@ -37,6 +37,8 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
 
         self._client_finder = ClientFinder()
         self._client_finder.set_current_time(kwargs['current_time'])
+        self._client_finder.set_dir_bag_size(kwargs['dir_bag_size'])
+        self._client_finder.set_dir_cache_size(kwargs['dir_cache_size'])
 
     def set_client_list_object(self, client_list):
         self._client_list = client_list
@@ -373,6 +375,8 @@ class ClientFinder(object):
         self._client_list = None
         self._clients = {}
         self._current_time = None
+        self._dir_bag_size = None
+        self._dir_cache_size = None
 
     def set_client_factory(self, client_factory):
         self._client_factory = client_factory
@@ -386,6 +390,12 @@ class ClientFinder(object):
     def set_current_time(self, current_time):
         self._current_time = current_time
 
+    def set_dir_bag_size(self, size):
+        self._dir_bag_size = size
+
+    def set_dir_cache_size(self, size):
+        self._dir_cache_size = size
+
     def find_client(self, client_name):
         if client_name not in self._clients:
             if client_name not in self._client_list.get_client_names():
@@ -397,6 +407,8 @@ class ClientFinder(object):
             dirname = self._client_list.get_client_dirname(client_name)
             client.set_dirname(dirname)
             client.set_current_time(self._current_time)
+            client.set_dir_cache_size(self._dir_cache_size)
+            client.set_dir_bag_size(self._dir_bag_size)
             self._clients[client_name] = client
 
         return self._clients[client_name]

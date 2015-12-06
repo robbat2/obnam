@@ -35,7 +35,9 @@ class RepositoryFormatGATests(obnamlib.RepositoryInterfaceTests):
 
         self.repo = obnamlib.RepositoryFormatGA(
             hooks=self.hooks,
-            current_time=time.time)
+            current_time=time.time,
+            dir_bag_size=1,
+            dir_cache_size=0)
         self.repo.set_fs(fs)
 
     def tearDown(self):

@@ -255,7 +255,11 @@ class App(cliapp.Application):
             'hooks': self.hooks,
             'current_time': self.time,
             'chunk_size': self.settings['chunk-size'],
-            }
+            'chunk_cache_size': self.settings['chunk-cache-size'],
+            'chunk_bag_size': self.settings['chunk-bag-size'],
+            'dir_cache_size': self.settings['dir-cache-size'],
+            'dir_bag_size': self.settings['dir-bag-size'],
+        }
 
         if create:
             return self.repo_factory.create_repo(

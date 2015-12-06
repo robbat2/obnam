@@ -33,6 +33,8 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
         chunk_store = obnamlib.GAChunkStore()
         if 'chunk_size' in kwargs:  # pragma: no cover
             chunk_store.set_max_chunk_size(kwargs['chunk_size'])
+        if 'chunk_cache_size' in kwargs:  # pragma: no cover
+            chunk_store.set_chunk_cache_size(kwargs['chunk_cache_size'])
         self.set_chunk_store_object(chunk_store)
 
     def init_repo(self):
