@@ -727,7 +727,10 @@ class BackupPlugin(obnamlib.ObnamPlugin):
         tracing.trace('opening file for reading')
         f = self.fs.open(filename, 'r')
 
-        summer = hashlib.md5()
+        if obnamlib.REPO_FILE_MD5 in self.repo.get_allowed_file_keys():
+            summer = hashlib.md5()
+        else:
+            summer = None
 
         chunk_size = int(self.app.settings['chunk-size'])
         while True:
@@ -739,7 +742,8 @@ class BackupPlugin(obnamlib.ObnamPlugin):
                 break
             tracing.trace('got %d bytes of data' % len(data))
             self.progress.update_progress_with_scanned(len(data))
-            summer.update(data)
+            if summer:
+                summer.update(data)
             if not self.pretend:
                 chunk_id = self.backup_file_chunk(data)
                 self.repo.append_file_chunk_id(
@@ -758,7 +762,8 @@ class BackupPlugin(obnamlib.ObnamPlugin):
         self.app.dump_memory_profile('at end of file content backup for %s' %
                                      filename)
         tracing.trace('done backing up file contents')
-        metadata.md5 = summer.digest()
+        if summer:
+            metadata.md5 = summer.digest()
 
     def backup_file_chunk(self, data):
         '''Back up a chunk of data by putting it into the repository.'''

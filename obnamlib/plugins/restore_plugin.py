@@ -274,7 +274,10 @@ class RestorePlugin(obnamlib.ObnamPlugin):
         logging.debug('restoring regular %s', filename)
         if self.write_ok:
             f = self.fs.open('./' + filename, 'wb')
-            summer = hashlib.md5()
+            if obnamlib.REPO_FILE_MD5 in self.repo.get_allowed_file_keys():
+                summer = hashlib.md5()
+            else:
+                summer = None
 
             try:
                 chunkids = self.repo.get_file_chunk_ids(gen, filename)
@@ -287,7 +290,7 @@ class RestorePlugin(obnamlib.ObnamPlugin):
             f.close()
 
             correct_checksum = metadata.md5
-            if summer.digest() != correct_checksum:
+            if summer and summer.digest() != correct_checksum:
                 msg = 'File checksum restore error: %s' % filename
                 msg += ' (%s vs %s)' % (
                     summer.hexdigest(), correct_checksum.encode('hex'))
@@ -301,7 +304,8 @@ class RestorePlugin(obnamlib.ObnamPlugin):
         for chunkid in chunkids:
             data = self.repo.get_chunk_content(chunkid)
             self.verify_chunk_checksum(data, chunkid)
-            checksummer.update(data)
+            if checksummer:
+                checksummer.update(data)
             self.downloaded_bytes += len(data)
             if len(data) != len(zeroes):
                 zeroes = '\0' * len(data)
