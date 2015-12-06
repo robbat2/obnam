@@ -56,12 +56,7 @@ class RepositoryFactory(object):
         return self._implementations
 
     def setup_hooks(self, hooks):  # pragma: no cover
-        '''Create all repository related hooks.
-
-        The factory instantiates all supported repository format classes.
-        This causes the hooks to be created.
-
-        '''
+        '''Create all repository related hooks.'''
 
         for impl in self._implementations:
             impl.setup_hooks(hooks)
