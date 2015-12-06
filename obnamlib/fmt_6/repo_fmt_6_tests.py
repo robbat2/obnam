@@ -26,7 +26,10 @@ class RepositoryFormat6Tests(obnamlib.RepositoryInterfaceTests):
         self.tempdir = tempfile.mkdtemp()
         fs = obnamlib.LocalFS(self.tempdir)
         self.hooks = obnamlib.HookManager()
-        obnamlib.RepositoryFormat6.setup_hooks(self.hooks)
+
+        repo_factory = obnamlib.RepositoryFactory()
+        repo_factory.setup_hooks(self.hooks)
+
         self.repo = obnamlib.RepositoryFormat6(hooks=self.hooks)
         self.repo.set_fs(fs)
 

@@ -58,6 +58,12 @@ class RepositoryFactory(object):
     def setup_hooks(self, hooks):  # pragma: no cover
         '''Create all repository related hooks.'''
 
+        # Create hooks that are independent of repository format.
+        hooks.new('repository-toplevel-init')
+        hooks.new_filter('repository-data')
+        hooks.new('repository-add-client')
+
+        # Ask each repository format to create its own hooks.
         for impl in self._implementations:
             impl.setup_hooks(hooks)
 

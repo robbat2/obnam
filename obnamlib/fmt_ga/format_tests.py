@@ -30,8 +30,8 @@ class RepositoryFormatGATests(obnamlib.RepositoryInterfaceTests):
         fs = obnamlib.LocalFS(self.tempdir)
         self.hooks = obnamlib.HookManager()
 
-        # FIXME: The following must be format 6, for now.
-        obnamlib.RepositoryFormat6.setup_hooks(self.hooks)
+        repo_factory = obnamlib.RepositoryFactory()
+        repo_factory.setup_hooks(self.hooks)
 
         self.repo = obnamlib.RepositoryFormatGA(
             hooks=self.hooks,

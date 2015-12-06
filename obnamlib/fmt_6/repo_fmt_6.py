@@ -70,9 +70,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
 
     @classmethod
     def setup_hooks(cls, hooks):
-        hooks.new('repository-toplevel-init')
-        hooks.new_filter('repository-data')
-        hooks.new('repository-add-client')
+        pass
 
     def get_fs(self):
         return self._real_fs
