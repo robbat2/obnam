@@ -101,8 +101,7 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
                 obnamlib.REPO_FILE_XATTR_BLOB,
                 obnamlib.REPO_FILE_BLOCKS,
                 obnamlib.REPO_FILE_DEV,
-                obnamlib.REPO_FILE_INO,
-                obnamlib.REPO_FILE_MD5]
+                obnamlib.REPO_FILE_INO]
 
     def interpret_generation_spec(self, client_name, genspec):
         ids = self.get_client_generation_ids(client_name)
