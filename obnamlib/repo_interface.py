@@ -38,34 +38,44 @@ import obnamlib
 # little magic to get a) automatic enumeration b) mapping between
 # values and names.
 
-REPO_CLIENT_TEST_KEY = 0
-REPO_GENERATION_TEST_KEY = 1
-REPO_FILE_TEST_KEY = 2
-REPO_FILE_USERNAME = 3
-REPO_FILE_GROUPNAME = 4
-REPO_FILE_SYMLINK_TARGET = 5
-REPO_FILE_XATTR_BLOB = 6
-REPO_FILE_MD5 = 7
+
+_saved_id = 0
+
+
+def _get_next_id():
+    global _saved_id
+    _saved_id += 1
+    return _saved_id
+
+
+REPO_CLIENT_TEST_KEY = _get_next_id()
+REPO_GENERATION_TEST_KEY = _get_next_id()
+REPO_FILE_TEST_KEY = _get_next_id()
+REPO_FILE_USERNAME = _get_next_id()
+REPO_FILE_GROUPNAME = _get_next_id()
+REPO_FILE_SYMLINK_TARGET = _get_next_id()
+REPO_FILE_XATTR_BLOB = _get_next_id()
+REPO_FILE_MD5 = _get_next_id()
 
 _MAX_STRING_KEY = REPO_FILE_MD5
 
-REPO_GENERATION_STARTED = 8
-REPO_GENERATION_ENDED = 9
-REPO_GENERATION_IS_CHECKPOINT = 10
-REPO_GENERATION_FILE_COUNT = 11
-REPO_GENERATION_TOTAL_DATA = 12
-REPO_FILE_MODE = 13
-REPO_FILE_MTIME_SEC = 14
-REPO_FILE_MTIME_NSEC = 15
-REPO_FILE_ATIME_SEC = 16
-REPO_FILE_ATIME_NSEC = 17
-REPO_FILE_NLINK = 18
-REPO_FILE_SIZE = 19
-REPO_FILE_UID = 20
-REPO_FILE_GID = 21
-REPO_FILE_BLOCKS = 22
-REPO_FILE_DEV = 23
-REPO_FILE_INO = 24
+REPO_GENERATION_STARTED = _get_next_id()
+REPO_GENERATION_ENDED = _get_next_id()
+REPO_GENERATION_IS_CHECKPOINT = _get_next_id()
+REPO_GENERATION_FILE_COUNT = _get_next_id()
+REPO_GENERATION_TOTAL_DATA = _get_next_id()
+REPO_FILE_MODE = _get_next_id()
+REPO_FILE_MTIME_SEC = _get_next_id()
+REPO_FILE_MTIME_NSEC = _get_next_id()
+REPO_FILE_ATIME_SEC = _get_next_id()
+REPO_FILE_ATIME_NSEC = _get_next_id()
+REPO_FILE_NLINK = _get_next_id()
+REPO_FILE_SIZE = _get_next_id()
+REPO_FILE_UID = _get_next_id()
+REPO_FILE_GID = _get_next_id()
+REPO_FILE_BLOCKS = _get_next_id()
+REPO_FILE_DEV = _get_next_id()
+REPO_FILE_INO = _get_next_id()
 
 
 _repo_key_names = dict(
