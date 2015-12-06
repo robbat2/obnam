@@ -1731,7 +1731,6 @@ class RepositoryInterfaceTests(unittest.TestCase):  # pragma: no cover
             REPO_FILE_GROUPNAME,
             REPO_FILE_SYMLINK_TARGET,
             REPO_FILE_XATTR_BLOB,
-            REPO_FILE_MD5,
             ]
         for key in common:
             self.assertTrue(
