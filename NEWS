@@ -8,6 +8,15 @@ development, called `green-albatross`. It is **NOT** meant for real
 use. It is likely to change in incompatible ways without warning. Do
 not use it unless you're willing to lose your backup.
 
+Version 1.19, released UNRELEASED
+---------------------------------
+
+Bug fixes:
+
+* Backup no longer ignores a closed SSH connection. This means it
+  won't keep trying to use it, forever. Instead, it crashes and
+  terminates the backup.
+
 Version 1.18.2, released 2015-11-15
 ---------------------------------
 
