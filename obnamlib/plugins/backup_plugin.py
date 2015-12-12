@@ -404,7 +404,7 @@ class BackupPlugin(obnamlib.ObnamPlugin):
                 self.progress.error(msg, exc=e)
                 if not existed and not self.pretend:
                     self.remove_partially_backed_up_file(pathname)
-                if e.errno == errno.ENOSPC:
+                if e.errno in (errno.ENOSPC, errno.EPIPE):
                     raise
 
             if self.checkpoint_manager.time_for_checkpoint():
