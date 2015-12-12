@@ -505,7 +505,7 @@ Remove a public key from a repository.
         get_fingerprint "$MATCH_2" |
         awk '{ print substr($0, length-16) }')"
     run_obnam "$MATCH_1" -r "$DATADIR/$MATCH_3" \
-        remove-key --keyid "$keyid" \
+        remove-key --keyid "$keyid"
 
 Forget a key from the user's keyring.
 
