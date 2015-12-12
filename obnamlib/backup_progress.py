@@ -63,9 +63,7 @@ class BackupProgress(object):
     def error(self, msg, exc=None):
         self.errors = True
 
-        logging.error(msg)
-        if exc:
-            logging.error(repr(exc))
+        logging.error(msg, exc_info=exc)
         self._ts.error('ERROR: %s' % msg)
 
     def what(self, what_what):
