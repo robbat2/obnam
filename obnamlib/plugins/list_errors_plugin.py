@@ -42,7 +42,11 @@ class ListErrorsPlugin(obnamlib.ObnamPlugin):
 
     def indent(self, s):
         s = ''.join(s.rstrip() + '\n' for s in s.splitlines())
-        paras = ['\n'.join(para.split()) for para in s.split('\n\n') if para.strip()]
+        paras = [
+            '\n'.join(para.split())
+            for para in s.split('\n\n')
+            if para.strip()
+        ]
         return '\n\n'.join(
             textwrap.fill(para, initial_indent=' '*4, subsequent_indent=' '*4)
             for para in paras)
