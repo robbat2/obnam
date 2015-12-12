@@ -28,6 +28,7 @@ obnamlib/plugins/fsck_plugin.py
 obnamlib/plugins/fuse_plugin.py
 obnamlib/plugins/__init__.py
 obnamlib/plugins/gaconfig_plugin.py
+obnamlib/plugins/list_errors_plugin.py
 obnamlib/plugins/list_formats_plugin.py
 obnamlib/plugins/one_file_system_plugin.py
 obnamlib/plugins/restore_plugin.py
@@ -38,6 +39,7 @@ obnamlib/plugins/vfs_local_plugin.py
 obnamlib/repo_fs.py
 obnamlib/repo_interface.py
 obnamlib/structurederror.py
+obnamlib/structurederror_finder.py
 obnamlib/version.py
 obnamlib/vfs.py
 
