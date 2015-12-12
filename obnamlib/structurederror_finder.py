@@ -57,7 +57,7 @@ def _get_submodules(module):
 def _find_plugin_modules(plugin_manager):
     modules = []
     for filename in plugin_manager.plugin_files:
-        module_name, ext = os.path.splitext(os.path.basename(filename))
+        module_name, _ = os.path.splitext(os.path.basename(filename))
         with open(filename, 'rb') as f:
             module = imp.load_module(
                 module_name, f, filename, ('.py', 'r', imp.PY_SOURCE))
