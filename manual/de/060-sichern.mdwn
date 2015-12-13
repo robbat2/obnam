@@ -147,7 +147,7 @@ Befehl ausführen:
     sftp USER@SERVER
 
 Passen Sie `USER@SERVER` entsprechend Ihren Zugangsdaten an. Sie sollten 
-die Meldung `Connected to SERVER` sehen und in der Lage sin, `ls -la` 
+die Meldung `Connected to SERVER` sehen und in der Lage sein, `ls -la` 
 aufzurufen um den Verzeichnisinhalt der Gegenseite auszugeben.
 
 Sobald all das richtig eingerichtet ist, kann Obnam den Server über eine 
