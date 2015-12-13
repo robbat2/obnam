@@ -23,6 +23,9 @@ Improvements to the manual:
   and explanations. This will need to be updated manually from time to
   time.
 
+* The manual now has sections on turning on full debug logging and
+  reporting problems.
+
 
 Version 1.18.2, released 2015-11-15
 ---------------------------------

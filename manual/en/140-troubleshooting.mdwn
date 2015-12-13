@@ -7,6 +7,28 @@ common problems with Obnam use. It also explains what things go where
 in an Obnam backup repository.
 
 
+Turning on full logging
+-----------------------
+
+Obnam can write a log file. There are several options controlling
+that. Knowing these can help get out the most information when there's
+a problem that needs to be investigated.
+
+* `--log=obnam.log` tells Obnam where to log. The log is a simple text
+  file.
+* `--log-level=debug` tells Obnam to log at the most detailed level.
+  The default level is `info`, which excludes most debug information.
+* `--trace=obnamlib --trace=larch` tells Obnam to log additional debug
+  information. The two arguments match all filenames in Obnam and the
+  Larch library Obnam uses. This additional information is mostly
+  useful to someone who can read and understand the program source
+  code.
+
+Note that these settings can make log files be quite large, in the
+order of tens of megabytes. The size depends on how many files and how
+much data your live data has.
+
+
 Reporting problems ("bugs")
 ---------------------------
 
@@ -39,11 +61,12 @@ easier to figure out what the problem is.
   filenames or hostnames, you can replace those with XXXX.
 
 * If you can reproduce the problem while running with
-  `--log-level=debug`, `--log=obnam.log` and `--trace=obnamlib`
-  options, include a suitable amount from the end of the log file. The
-  suitable amount may depend on the situation, but if you give the
-  last two hundred lines, and it's not enough, we'll ask for more.
-  Again, feel free to replace any sensitive filenames, etc, with XXXX.
+  `--log-level=debug`, `--log=obnam.log` and `--trace=obnamlib
+  --trace=larch` options, include a suitable amount from the end of
+  the log file. The suitable amount may depend on the situation, but
+  if you give the last two hundred lines, and it's not enough, we'll
+  ask for more. Again, feel free to replace any sensitive filenames,
+  etc, with XXXX.
 
 * The output of the `env` command, in the same terminal window in
   which you ran Obnam. (Again, as an attachment.)
