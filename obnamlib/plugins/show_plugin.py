@@ -209,7 +209,22 @@ class ShowPlugin(obnamlib.ObnamPlugin):
         return filename
 
     def format_time(self, timestamp):
-        return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+        prefix = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+        return prefix + ' ' + self.format_timezone()
+
+    def format_timezone(self):
+        '''Return a timezone indication on +0300 format.'''
+
+        # A zero offset gets a plus sign. The time.timezone value has the
+        # opposite sign of what we want in the output.
+        if time.timezone <= 0:
+            sign = '+'
+        else:
+            sign = '-'
+
+        hh = abs(time.timezone) / 3600
+        mm = (abs(time.timezone) % 3600) / 60
+        return '%c%02d%02d' % (sign, hh, mm)
 
     def isdir(self, gen_id, filename):
         mode = self.repo.get_file_key(

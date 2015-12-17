@@ -26,6 +26,10 @@ Improvements to the manual:
 * The manual now has sections on turning on full debug logging and
   reporting problems.
 
+Improvements to functionality:
+
+* The output of `obnam generations` now show time zone. Lars Wirzenius
+  implemented based on suggestion by Limdi.
 
 Version 1.18.2, released 2015-11-15
 ---------------------------------
