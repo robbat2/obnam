@@ -555,7 +555,7 @@ class SftpFS(obnamlib.VirtualFileSystem):
     def cat(self, pathname):
         self._delay()
         f = self.open(pathname, 'rb')
-        f.prefetch()
+        self._prefetch(f)
         chunks = []
         while True:
             chunk = f.read(self.chunk_size)
@@ -565,6 +565,20 @@ class SftpFS(obnamlib.VirtualFileSystem):
             self.bytes_read += len(chunk)
         f.close()
         return ''.join(chunks)
+
+    def _prefetch(self, f):
+        '''Call f.prefetch in the right way.
+
+        Up to paramiko version 1.15.1, prefetch accepts no arguments.
+        In 1.16 it requires one.
+
+        '''
+
+        if paramiko.__version_info__ < (1, 16):
+            f.prefetch()
+        else:
+            file_size = f.lstat().st_size
+            f.prefetch(file_size)
 
     @ioerror_to_oserror
     def write_file(self, pathname, contents):
@@ -588,6 +602,7 @@ class SftpFS(obnamlib.VirtualFileSystem):
         f.close()
 
     def _tempfile(self, dirname):
+
         '''Create a new file with a random name, return handle and name.'''
 
         if dirname:

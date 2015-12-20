@@ -17,6 +17,12 @@ Bug fixes:
   won't keep trying to use it, forever. Instead, it crashes and
   terminates the backup.
 
+* The Paramiko SSH implementation, which Obnam uses, changed the
+  interface to the `prefetch` method in its 1.16 version. Obnam can
+  now deal with either variant of the method. Found and reported by
+  Kyle Manna, who provided a patch that Lars Wirzenius rewrote to be
+  backwards compatible to older versions of Paramiko.
+
 Improvements to the manual:
 
 * The manual now has an appendix listing all Obnam errors, with codes
