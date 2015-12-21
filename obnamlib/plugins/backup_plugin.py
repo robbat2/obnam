@@ -292,7 +292,6 @@ class BackupPlugin(obnamlib.ObnamPlugin):
 
         self.progress.what(prefix + ': commiting shared chunk indexes')
         self.repo.commit_chunk_indexes()
-        self.repo.unlock_chunk_indexes()
 
         self.progress.what(prefix + ': removing unused chunks')
         self.repo.remove_unused_chunks()
