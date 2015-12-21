@@ -96,8 +96,8 @@ class ForgetPlugin(obnamlib.ObnamPlugin):
         # Commit or unlock everything.
         self.repo.commit_client(client_name)
         self.repo.commit_chunk_indexes()
-        self.repo.unlock_everything()
         self.repo.remove_unused_chunks()
+        self.repo.unlock_everything()
         self.app.dump_memory_profile('after committing')
 
         self.repo.close()
