@@ -302,9 +302,6 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
     def flush_chunks(self):
         self._chunk_store.flush_chunks()
 
-    def remove_unused_chunks(self):
-        return self._chunk_store.remove_unused_chunks()
-
     def get_chunk_ids(self):
         return self._chunk_store.get_chunk_ids()
 
@@ -364,6 +361,12 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
     def remove_chunk_from_indexes_for_all_clients(self, chunk_id):
         self._require_we_got_chunk_indexes_lock()
         self._chunk_indexes.remove_chunk_from_indexes_for_all_clients(chunk_id)
+
+    def remove_unused_chunks(self):
+        self._require_we_got_chunk_indexes_lock()
+        # Note that we need to give remove_unused_chunks the chunk
+        # store as an argument, so that it can actually remove chunks.
+        return self._chunk_indexes.remove_unused_chunks(self._chunk_store)
 
     def validate_chunk_content(self, chunk_id):
         return self._chunk_indexes.validate_chunk_content(chunk_id)

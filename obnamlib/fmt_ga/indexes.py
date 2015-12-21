@@ -148,5 +148,9 @@ class GAChunkIndexes(object):
         if chunk_id in used_by:
             del used_by[chunk_id]
 
+    def remove_unused_chunks(self, chunk_store):
+        # FIXME: This is a no-op operation, for now.
+        pass
+
     def validate_chunk_content(self, chunk_id):
         return None

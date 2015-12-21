@@ -666,6 +666,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         pass
 
     def remove_unused_chunks(self):  # pragma: no cover
+        self._require_chunk_indexes_lock()
         for chunk_id in self._unused_chunks:
             self._remove_chunk(chunk_id)
         self._reset_unused_chunks()
