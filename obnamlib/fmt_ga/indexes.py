@@ -16,7 +16,9 @@
 # =*= License: GPL-3+ =*=
 
 
+import errno
 import hashlib
+import logging
 import os
 
 import obnamlib
@@ -125,7 +127,9 @@ class GAChunkIndexes(object):
             if client_ids:
                 still_used = True
             else:
-                del used_by[chunk_id]
+                # We leave an empty here, and use that in
+                # remove_unused_chunks to indicate an unused chunk.
+                pass
         return still_used
 
     def _remove_chunk_by_id(self, chunk_id):
@@ -149,8 +153,48 @@ class GAChunkIndexes(object):
             del used_by[chunk_id]
 
     def remove_unused_chunks(self, chunk_store):
-        # FIXME: This is a no-op operation, for now.
-        pass
+
+        def find_ids_of_unused_chunks(used_by):
+            return set(x for x in used_by if not used_by[x])
+
+        def remove_from_used_by(used_by, chunk_ids):
+            for chunk_id in chunk_ids:
+                del used_by[chunk_id]
+
+        def get_bag_ids(chunk_ids):
+            return set(
+                obnamlib.parse_object_id(chunk_id)[0]
+                for chunk_id in chunks_to_remove)
+
+        def get_chunk_ids_in_bag(bag_id):
+            bag = chunk_store._bag_store.get_bag(bag_id)
+            return [
+                obnamlib.make_object_id(bag_id, i)
+                for i in range(len(bag))
+            ]
+
+        def remove_bag_if_unused(used_by, bag_id):
+            chunk_ids = get_chunk_ids_in_bag(bag_id)
+            if not any(chunk_id in used_by for chunk_id in chunk_ids):
+                chunk_store._bag_store.remove_bag(bag_id)
+
+        self._load_data()
+        used_by = self._data['used_by']
+        chunks_to_remove = find_ids_of_unused_chunks(used_by)
+        remove_from_used_by(used_by, chunks_to_remove)
+        for bag_id in get_bag_ids(chunks_to_remove):
+            try:
+                remove_bag_if_unused(used_by, bag_id)
+            except EnvironmentError as e:
+                if e.errno == errno.ENOENT:
+                    # The bag's missing. We log, but otherwise
+                    # ignore that. Don't want to crash a forget
+                    # operation just because a chunk that was
+                    # meant to be removed is already removed.
+                    logging.warning(
+                        'Tried to delete bag that was missing: %s', bag_id)
+                else:
+                    raise
 
     def validate_chunk_content(self, chunk_id):
         return None
