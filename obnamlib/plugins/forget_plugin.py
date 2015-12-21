@@ -85,7 +85,9 @@ class ForgetPlugin(obnamlib.ObnamPlugin):
         self.app.ts['gens'] = removeids
         for genid in removeids:
             self.app.ts['gen'] = genid
-            self.remove(genid)
+            for unused_chunk_id in self.remove(genid):
+                self.repo.remove_chunk_from_indexes(
+                    unused_chunk_id, client_name)
             self.repo.commit_client(client_name)
             self.repo.commit_chunk_indexes()
             self.repo.remove_unused_chunks()
@@ -134,5 +136,6 @@ class ForgetPlugin(obnamlib.ObnamPlugin):
             self.app.ts.notify(
                 'Pretending to remove generation %s' %
                 self.repo.make_generation_spec(genid))
+            return []
         else:
-            self.repo.remove_generation(genid)
+            return self.repo.remove_generation(genid)
