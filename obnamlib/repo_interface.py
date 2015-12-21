@@ -644,6 +644,9 @@ class RepositoryInterface(object):
 
         The removed generation may be the currently unfinished one.
 
+        Return a list of chunk ids that are no longer used by this
+        client.
+
         '''
         raise NotImplementedError()
 
@@ -1562,16 +1565,18 @@ class RepositoryInterfaceTests(unittest.TestCase):  # pragma: no cover
 
     def test_removes_unfinished_generation(self):
         gen_id = self.create_generation()
-        self.repo.remove_generation(gen_id)
+        chunk_ids = self.repo.remove_generation(gen_id)
         self.assertEqual(self.repo.get_client_generation_ids('fooclient'), [])
+        self.assertEqual(type(chunk_ids), list)
 
     def test_removes_finished_generation(self):
         gen_id = self.create_generation()
         self.repo.commit_client('fooclient')
         self.repo.unlock_client('fooclient')
         self.repo.lock_client('fooclient')
-        self.repo.remove_generation(gen_id)
+        chunk_ids = self.repo.remove_generation(gen_id)
         self.assertEqual(self.repo.get_client_generation_ids('fooclient'), [])
+        self.assertEqual(type(chunk_ids), list)
 
     def test_removing_removed_generation_fails(self):
         gen_id = self.create_generation()

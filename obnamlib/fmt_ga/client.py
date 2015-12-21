@@ -203,6 +203,8 @@ class GAClient(object):
 
         self._generations.set_generations(remaining)
 
+        return []  # FIXME
+
     def get_generation_key(self, gen_number, key):
         self._load_data()
         generation = self._lookup_generation_by_gen_number(gen_number)

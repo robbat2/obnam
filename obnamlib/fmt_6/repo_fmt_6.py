@@ -561,6 +561,8 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         open_client_info.client.start_changes(create_tree=False)
         open_client_info.client.remove_generation(gen_number)
 
+        return []  # We handle chunk removal ourselves.
+
     def get_generation_chunk_ids(self, generation_id):
         # This intentionally doesn't construct chunk ids for in-tree
         # data, because that's very slow, as it requires iterating
