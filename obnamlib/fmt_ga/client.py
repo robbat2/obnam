@@ -201,9 +201,21 @@ class GAClient(object):
                 client_name=self._client_name,
                 gen_id=gen_number)
 
+        chunks_in_removed = self.get_generation_chunk_ids(gen_number)
+        chunks_remaining = self._get_chunk_ids_used_by_generations(remaining)
+        unused_chunks = set(chunks_in_removed).difference(chunks_remaining)
+
         self._generations.set_generations(remaining)
 
-        return []  # FIXME
+        return list(unused_chunks)
+
+    def _get_chunk_ids_used_by_generations(self, generations):
+        chunk_ids = set()
+        for generation in generations:
+            gen_number = generation.get_number()
+            chunk_ids = chunk_ids.union(
+                set(self.get_generation_chunk_ids(gen_number)))
+        return chunk_ids
 
     def get_generation_key(self, gen_number, key):
         self._load_data()
@@ -408,7 +420,7 @@ class GAGenerationList(object):
 
     def set_generations(self, generations):
         self._generations = generations
-        self._by_number = dict((gen.get_number, gen) for gen in generations)
+        self._by_number = dict((gen.get_number(), gen) for gen in generations)
 
 
 class GAGeneration(object):
