@@ -360,6 +360,33 @@ Die Deduplizierung in Obnam ist nicht perfekt. Die Granularität des Findens
 doppelter Daten ist recht grob (vgl. Option `--chunk-size`) , daher
 kann Obnam oft keine Überschneidungen finden, wenn die Änderungen nur klein sind.
 
+In den folgenden Fällen ist Deduplizierung nicht sinnvoll:
+
+* Änderungen an Dateien, indem größere Teile innerhalb der Datei
+  verschoben werden. Die (jetzige) Implementierung der Deduplizierung
+  basiert auf nicht überlappenden Teilen (chunks), die vom Anfang der
+  Datei an gebildet werden. Wenn Daten eingefügt werden, kann Obnam
+  nicht bemerken, dass der Rest der Daten nur etwas "nach hinten"
+  gerutscht ist. Das könnte zum Beispiel in Disk- oder ISO-Images
+  der Fall sein.
+
+* Dateien mit doppelten Daten, die aber nicht an einer Chunk-Grenze liegen.
+  Dies könnte zum Beispiel der Fall sein, wenn eine eMail mit großem
+  Anhang an mehrere Empfänger (=Mailboxen auf dem Host) gesendet wird.
+  Jeder Empfänger erhält verschiedene `Received` Kopfzeilen, was den
+  Mailbody und die Anhänge mehr oder weniger verschiebt. Aus diesem
+  Grund kann Obnam die doppelten Daten nicht erkennen und dementsprechend
+  nicht deduplizieren.
+
+* Wenn Daten komprimiert vorliegen, zum Beispiel als `.zip` oder
+  `.tar.xz`. Obnam weiss nichts von der Kompression und "sieht" nur die
+  komprimierten Daten, die naturgemäß nicht deduplizierbar sind.
+
+Künftige Versionen werden hoffentlich einen besseren
+Deduplizierungsalgorithmus enthalten. Sollten Sie diesen optimistischen
+Absatz in einer 2017 oder später erschienenen Version von Obnam finden,
+informieren Sie bitte die Maintainer. Vielen Dank.
+
 Deduplizierung und Sicherheit gegen Prüfsummen-Kollisionen
 ----------------------------------------------------------
 
