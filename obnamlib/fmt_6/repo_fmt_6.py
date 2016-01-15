@@ -16,13 +16,14 @@
 
 import errno
 import hashlib
-import larch
 import logging
 import os
 import random
 import re
 import stat
 import time
+
+import larch
 import tracing
 
 import obnamlib

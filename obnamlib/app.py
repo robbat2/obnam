@@ -14,13 +14,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import cliapp
-import larch
 import logging
 import socket
 import sys
 import time
 import tracing
+
+import cliapp
+import larch
 import ttystatus
 
 import obnamlib

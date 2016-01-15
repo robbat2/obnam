@@ -20,10 +20,6 @@ import logging
 import errno
 import struct
 
-import tracing
-
-import obnamlib
-
 try:
     import fuse
     fuse.fuse_python_api = (0, 2)
@@ -36,6 +32,10 @@ except ImportError:
         def __init__(self, **kwds):
             self.__dict__.update(kwds)
     fuse = Bunch(Fuse=object)
+
+import tracing
+
+import obnamlib
 
 
 class FileNotFoundError(obnamlib.ObnamError):

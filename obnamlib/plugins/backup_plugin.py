@@ -21,11 +21,12 @@ import os
 import re
 import stat
 import traceback
-import tracing
 import urlparse
 
-import obnamlib
 import larch
+import tracing
+
+import obnamlib
 
 
 class RepositorySettingMissingError(obnamlib.ObnamError):
