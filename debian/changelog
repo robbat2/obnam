@@ -1,4 +1,4 @@
-obnam (1.19) unstable; urgency=medium
+obnam (1.19-1) unstable; urgency=medium
 
   * New upstream version
     * Fix "ignored Broken Pipe exception" (Closes: #679940)
