@@ -16,6 +16,7 @@
 # =*= License: GPL-3+ =*=
 
 
+import errno
 import os
 import random
 
@@ -119,7 +120,7 @@ class GAClientList(object):
             try:
                 self._fs.create_and_init_toplevel(dirname)
             except OSError as e:
-                if e.errno == e.EEXIST:
+                if e.errno == errno.EEXIST:
                     continue
                 raise
             return candidate_id

@@ -16,6 +16,7 @@
 # =*= License: GPL-3+ =*=
 
 
+import errno
 import os
 import random
 
@@ -113,7 +114,7 @@ class IdInventor(object):
         try:
             self._fs.write_file(filename, '')
         except OSError as e:  # pragma: no cover
-            if e.errno == e.EEXIST:
+            if e.errno == errno.EEXIST:
                 return False
             raise
         return True
