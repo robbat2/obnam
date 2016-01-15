@@ -77,6 +77,8 @@ class StructuredError(Exception):
 
     '''
 
+    msg = None
+
     def __init__(self, **kwargs):
         Exception.__init__(self)
         self.kwargs = kwargs
