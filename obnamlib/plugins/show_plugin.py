@@ -263,12 +263,12 @@ class ShowPlugin(obnamlib.ObnamPlugin):
         ]
 
         result = []
-        for i in range(len(fields)):
+        for i, field in enumerate(fields):
             if widths[i] < 0:
                 fmt = '%-*s'
             else:
                 fmt = '%*s'
-            result.append(fmt % (abs(widths[i]), fields[i]))
+            result.append(fmt % (abs(widths[i]), field))
         self.app.output.write('%s\n' % ' '.join(result))
 
     def kdirstat(self, args):

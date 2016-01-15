@@ -45,8 +45,7 @@ class BlobStore(object):
             return self._cached_blobs.get(blob_id)
         if self._bag_store.has_bag(bag_id):
             bag = self._bag_store.get_bag(bag_id)
-            for i in range(len(bag)):
-                this_blob = bag[i]
+            for i, this_blob in enumerate(bag):
                 this_id = obnamlib.make_object_id(bag_id, i)
                 self._cached_blobs.put(this_id, this_blob)
             return bag[index]
