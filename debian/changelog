@@ -1,10 +1,9 @@
-obnam (1.19) UNRELEASED; urgency=medium
+obnam (1.19) unstable; urgency=medium
 
   * New upstream version
-    * Fix "ignored Broken Pipe exception" <explain what you changed and
-      why> (Closes: #679940)
+    * Fix "ignored Broken Pipe exception" (Closes: #679940)
 
- -- Lars Wirzenius <liw@liw.fi>  Sat, 12 Dec 2015 14:55:30 +0100
+ -- Lars Wirzenius <liw@liw.fi>  Fri, 15 Jan 2016 18:23:05 +0200
 
 obnam (1.18.2-1) unstable; urgency=medium
 
