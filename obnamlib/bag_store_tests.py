@@ -39,9 +39,7 @@ class BagStoreTests(unittest.TestCase):
 
     def assertEqualBags(self, a, b):
         self.assertEqual(a.get_id(), b.get_id())
-        self.assertEqual(len(a), len(b))
-        for i in range(len(a)):
-            self.assertEqual(a[i], b[i])
+        self.assertEqual(list(a), list(b))
 
     def test_stores_and_retrieves_an_empty_bag(self):
         self.store.put_bag(self.bag)
