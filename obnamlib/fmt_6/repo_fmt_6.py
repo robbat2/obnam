@@ -461,7 +461,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         return client_name, gen_number
 
     def _require_existing_generation(self, generation_id):
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         if generation_id not in self.get_client_generation_ids(client_name):
             raise obnamlib.RepositoryGenerationDoesNotExist(
                 client_name=client_name, gen_id=generation_id)
@@ -541,7 +541,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             client_name=client_name, gen_id=genspec)
 
     def make_generation_spec(self, gen_id):
-        client_name, gen_number = self._unpack_gen_id(gen_id)
+        _, gen_number = self._unpack_gen_id(gen_id)
         return str(gen_number)
 
     def remove_generation(self, gen_id):
@@ -874,7 +874,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         self._setup_file_key_cache()
 
     def _require_existing_file(self, generation_id, filename):
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
 
         if generation_id not in self.get_client_generation_ids(client_name):
             raise obnamlib.RepositoryGenerationDoesNotExist(
@@ -896,7 +896,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             return False
 
     def add_file(self, generation_id, filename):
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         self._require_client_lock(client_name)
         client = self._open_client(client_name)
         encoded_metadata = obnamlib.fmt_6.metadata_codec.encode_metadata(
@@ -904,7 +904,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         client.create(filename, encoded_metadata)
 
     def remove_file(self, generation_id, filename):
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         self._require_client_lock(client_name)
         self._flush_file_key_cache()
         client = self._open_client(client_name)
@@ -933,8 +933,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
     def _flush_file_key_cache(self):
         for cache_key, value in self._file_key_cache.items():
             generation_id, filename = cache_key
-            client_name, generation_number = self._unpack_gen_id(
-                generation_id)
+            client_name, _ = self._unpack_gen_id(generation_id)
             dirty, metadata = value
             if dirty:
                 encoded_metadata = \
@@ -959,7 +958,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             self._flush_file_key_cache()
             self._require_existing_file(generation_id, filename)
             self._cache_file_keys_from_storage(generation_id, filename)
-        dirty, metadata = self._file_key_cache[cache_key]
+        _, metadata = self._file_key_cache[cache_key]
 
         if key in self._file_keys:
             value = getattr(metadata, self._file_keys[key])
@@ -968,14 +967,14 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             else:
                 return value or ''
         else:
-            client_name, gen_number = self._unpack_gen_id(generation_id)
+            client_name, _ = self._unpack_gen_id(generation_id)
             raise obnamlib.RepositoryFileKeyNotAllowed(
                 format=self.format,
                 client_name=client_name,
                 key_name=obnamlib.repo_key_name(key))
 
     def set_file_key(self, generation_id, filename, key, value):
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         self._require_client_lock(client_name)
 
         cache_key = self._get_file_key_cache_key(generation_id, filename)
@@ -983,7 +982,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
             self._flush_file_key_cache()
             self._require_existing_file(generation_id, filename)
             self._cache_file_keys_from_storage(generation_id, filename)
-        dirty, metadata = self._file_key_cache[cache_key]
+        _, metadata = self._file_key_cache[cache_key]
 
         if key in self._file_keys:
             setattr(metadata, self._file_keys[key], value)
@@ -1007,7 +1006,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         # We ignore in-tree data here. A file that has real chunks doesn't
         # have in-tree data, so it should be OK.
         self._require_existing_file(generation_id, filename)
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         self._require_client_lock(client_name)
         client = self._open_client(client_name)
         client.set_file_chunks(filename, [])  # FIXME: current gen only
@@ -1015,7 +1014,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
     def append_file_chunk_id(self, generation_id, filename, chunk_id):
         assert not self._is_in_tree_chunk_id(chunk_id)
         self._require_existing_file(generation_id, filename)
-        client_name, gen_number = self._unpack_gen_id(generation_id)
+        client_name, _ = self._unpack_gen_id(generation_id)
         self._require_client_lock(client_name)
         client = self._open_client(client_name)
         client.append_file_chunks(filename, [chunk_id])  # FIXME: curgen only
