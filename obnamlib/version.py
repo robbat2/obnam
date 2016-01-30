@@ -15,4 +15,4 @@
 #
 # =*= License: GPL-3+ =*=
 
-__version__ = '1.19'
+__version__ = '1.19.1'
