@@ -8,6 +8,18 @@ development, called `green-albatross`. It is **NOT** meant for real
 use. It is likely to change in incompatible ways without warning. Do
 not use it unless you're willing to lose your backup.
 
+Version 1.19.1, released UNRELEASED
+---------------------------------
+
+Bug fix:
+
+* The check for paramiko version turned out not to work with
+  versions 1.7.8 through 1.10.4, due to the
+  `paramiko.__version_info__` variable being missing. It's there in
+  earlier and later versions. Lars Wirzenius added code to make the
+  check work if the `paramiko.__version__` variable is there. Jan
+  Niggemann provided research and testing.
+
 Version 1.19, released 2016-01-15
 ---------------------------------
 

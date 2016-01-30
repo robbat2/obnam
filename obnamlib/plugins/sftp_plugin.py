@@ -80,6 +80,11 @@ class HardlinkError(obnamlib.ObnamError):
     '''
 
 
+class UnknownParamikoVersion(obnamlib.ObnamError):
+
+    msg = '''Cannot find out version of Paramiko.'''
+
+
 def ioerror_to_oserror(method):
     '''Decorator to convert an IOError exception to OSError.
 
@@ -574,11 +579,32 @@ class SftpFS(obnamlib.VirtualFileSystem):
 
         '''
 
-        if paramiko.__version_info__ < (1, 16):
+        version_info = self._get_paramiko_version_info()
+        if version_info < (1, 16):
             f.prefetch()
         else:
             file_size = self.lstat(pathname).st_size
             f.prefetch(file_size)
+
+    def _get_paramiko_version_info(self):
+        '''Get the __version_info__ tuple for paramiko.
+
+        Some versions of paramiko (1.7.8 to 1.10.4, according to
+        research by Jan Niggemann) have no __version_info__ tuple. We
+        need that tuple to do version comparisons.
+
+        This method constructs the tuple from paramiko.__version__, if
+        paramiko.__version_info__ is missing. If __version__ is also
+        missing, it raises an exception.
+
+        '''
+
+        if hasattr(paramiko, '__version_info__'):
+            return paramiko.__version_info__
+        elif hasattr(paramiko, '__version__'):
+            return tuple(int(x) for x in paramiko.__version__.split('.'))
+        else:
+            raise UnknownParamikoVersion()
 
     @ioerror_to_oserror
     def write_file(self, pathname, contents):
