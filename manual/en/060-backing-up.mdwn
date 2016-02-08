@@ -137,8 +137,8 @@ protocol (part of SSH). You need the following to achieve this:
   exchange for having one of their machines at your place, so that you
   both can backup remotely.
   
-* An **ssh key** for logging into the server. You _can_ log in using
-  passwords too, but it is quite cumbersome.
+* An **ssh key** for logging into the server. Obnam does not currently
+  support logging in via passwords.
 
 * Enough disk space on the server to hold your backups.
 
