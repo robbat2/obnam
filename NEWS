@@ -8,6 +8,14 @@ development, called `green-albatross`. It is **NOT** meant for real
 use. It is likely to change in incompatible ways without warning. Do
 not use it unless you're willing to lose your backup.
 
+Version 1.20, released UNRELEASED
+---------------------------------
+
+Bug fixes:
+
+* The manual and manual page used to claim you could break only the
+  locks for one client. This was not true. The manuals has been fixed.
+
 Version 1.19.1, released 2016-01-30
 ---------------------------------
 

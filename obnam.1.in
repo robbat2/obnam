@@ -103,11 +103,11 @@ all file contents still exists in the backup repository.
 It may take quite a long time to run.
 .IP \(bu
 .B force\-lock
-removes a lock file for a client in the repository.
-You should only force a lock if you are sure no-one is accessing that
-client's data in the repository.
-A dangling lock might happen, for example, if obnam loses its network
-connection to the backup repository.
+removes lock files for aall clients in the repository.
+You should only force a lock if you are sure no client is accessing
+the repository.
+A dangling lock might happen, for example,
+if "obnam backup" loses its network connection to the backup repository.
 .IP \(bu
 .B client\-keys
 lists the encryption key associated with each client.

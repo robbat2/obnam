@@ -451,27 +451,18 @@ happen if Obnam is interrupted by the user before it's finished.
 
 The Obnam command `force-lock` deals with this situation. It is
 dangerous, though. If you force open a lock that is in active use by
-a running Obnam instance, there will likely to be some stepping of
-toes. The result may, in extreme cases, even result in repository
-corruption. So be careful.
+any running Obnam instance, on any client machine using that
+repository, there will likely to be some stepping of toes. The result
+may, in extreme cases, even result in repository corruption. So be
+careful.
 
 If you've decided you can safely do it, this is an example of how to
 do it:
 
     obnam -r /media/backups/tomjon-repo force-lock
 
-Note that some of the locks are per-client, to prevent you from
-accidentally running Obnam twice for the same client, which would
-result in standing on your own toes: kind of impressive, but
-uncomfortable and not recommended.
-
-If you need to force open a lock for specific client, you can specify
-the client name explicitly:
-
-    obnam --client-name magrat \
-        -r /media/backups/tomjon-repo force-lock
-
-(Long line broken to two for typographical reasons.)
+It is not currently possibly to only break locks related to one
+client.
 
 Consistency of live data
 ------------------------
