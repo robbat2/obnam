@@ -15,6 +15,7 @@
 
 
 import datetime
+import logging
 
 import obnamlib
 
@@ -35,6 +36,10 @@ class ForgetPlugin(obnamlib.ObnamPlugin):
         '''Forget (remove) specified backup generations.'''
         self.app.settings.require('repository')
         self.app.settings.require('client-name')
+
+        if not args and not self.app.settings['keep']:
+            logging.info('forget: Nothing to forget, not doing anything')
+            return
 
         self.setup_progress_reporting()
 

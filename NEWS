@@ -11,6 +11,11 @@ not use it unless you're willing to lose your backup.
 Version 1.20, released UNRELEASED
 ---------------------------------
 
+Minor changes:
+
+* Lars Wirzenius changed `obnam forget` so that if there is nothing to
+  do, it doesn't even try to connect to the repository.
+
 Bug fixes:
 
 * The manual and manual page used to claim you could break only the
