@@ -29,6 +29,8 @@ import tempfile
 
 import cliapp
 
+import obnamlib
+
 
 # We need to know whether we can run yarn. We do this by checking
 # the python-markdown version: if it's new enough, we assume yarn
@@ -329,7 +331,7 @@ class Check(Command):
 
 
 setup(name='obnam',
-      version='1.19.1',
+      version=obnamlib.__version__,
       description='Backup software',
       author='Lars Wirzenius',
       author_email='liw@liw.fi',
