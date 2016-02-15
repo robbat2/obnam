@@ -173,26 +173,26 @@ class Check(Command):
         if self.unit_tests:
             self.run_unit_tests()
 
+        if self.nitpick:
+            self.run_nitpick_checks()
+
         if (self.yarns or self.all_yarns) and got_yarn:
             self.run_yarn()
 
         num_clients = '2'
         num_generations = '16'
 
-        if self.lock_tests:
-            self.run_lock_test(num_clients, num_generations)
-
-        if self.crash_tests:
-            self.run_crash_test()
-
         if self.sftp_tests:
             self.run_sftp_test()
+
+        if self.lock_tests:
+            self.run_lock_test(num_clients, num_generations)
 
         if self.network_lock_tests:
             self.run_network_lock_test(num_clients, num_generations)
 
-        if self.nitpick:
-            self.run_nitpick_checks()
+        if self.crash_tests:
+            self.run_crash_test()
 
         print "setup.py check done"
 
