@@ -135,8 +135,8 @@ ein eigener Server sein, ein gemieteter virtueller Server ("VPS"), oder
 etwas Ähnliches wie z.B. der Rechner eines Freundes, der Ihnen 
 Plattenplatz auf seinem System zur Verfügung stellt (und umgekehrt!).
 
-* Ein **ssh key** ("Schlüssel"), um sich beim Server anzumelden. Das Login 
-über Passwort ist möglich, aber umständlich.
+* Ein **ssh key** ("Schlüssel"), um sich beim Server anzumelden. Ein Login 
+mittels Passwort wird zur Zeit von Obnam nicht unterstützt.
 
 * Genügend Speicherplatz auf dem Server, um Ihre Backups vorzuhalten.
 
@@ -463,8 +463,9 @@ Netzwerkverbindung oder aufgrund eines Fehlers in Obnam passieren, genau
 so wenn Obnam vom Benutzer unterbrochen wird, bevor es fertig ist.
 
 Die Befehl `force-lock` kann diese Situation bereinigen, aber das ist 
-gefährlich. Wenn Sie eine Sperre, die von Obnam aktiv benutzt wird, 
-manuell aufheben, dann wird es wahrscheinlich ins Stolpern geraten. Im 
+gefährlich. Wenn Sie eine Sperre aufheben, die von egal welcher
+Obnam-Instanz auf egal welchem Client, der das Repository aktiv benutzt,
+manuell aufheben, dann wird Obnam wahrscheinlich ins Stolpern geraten. Im 
 Extremfall kann sogar das Repository beschädigt werden. Seien Sie also 
 vorsichtig.
 
@@ -473,18 +474,8 @@ wie folgt aufgehoben:
 
     obnam -r /media/backups/tomjon-repo force-lock
 
-Beachten Sie, dass manche Locks je Client gelten, um zu verhindern das 
-Obnam versehentlich zweimal auf dem gleichen Client läuft. Das wäre, wie 
-auf die eigenen Zehen zu steigen: Irgendwie beeindruckend, aber 
-unangenehm und nicht zu empfehlen.
-
-Wenn Sie eine Sperre für einen bestimmten Client manuell aufheben 
-müssen, können Sie den Client-Namen explizit angeben:
-
-    obnam --client-name magrat \
-        -r /media/backups/tomjon-repo force-lock
-
-(Lange Zeile aus Layout-Gründen umgebrochen.)
+Zum jetzigen Zeitpunkt ist es nicht möglich Eine Sperre manuell aufzuheben,
+die zu einem einzelnen Client gehört.
 
 Konsistenz der Live-Daten
 -------------------------
