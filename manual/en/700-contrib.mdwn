@@ -42,6 +42,68 @@ chapter for suggestions on how to contribute to the list.
 Helping support users
 ---------------------
 
+Perhaps the easiest way to participate in the project is to help
+support other users of the software. This is easy, and doesn't
+necessarily require more than being able to use the software oneself.
+Yet it is quite valuable, as it frees others from doing that. Even
+with the highest quality, easiest to use software, there's always some
+need for user support:
+
+* Code can be wrong, and a user may experience this. Analysing the
+  situation and isolating the bug is an important part of the software
+  development process.
+
+* Documentation can be wrong, or out of date, or written in
+  anticipation of a feature that doesn't exist yet.
+
+* Some people have misunderstandings, due to whatever reason, which
+  leads them to have problems when using the software. Figuring out
+  what the actual problem and its cause are can be a time consuming
+  process, but often does not require any special skills, except for
+  patience and a willingness to ask a lot of questions.
+
+In the Obnam project, the best way to help out with this is to
+subscribe to the `obnam-support@obnam.org` mailing list or join the
+`#obnam` (irc.oftc.net) IRC channel, and start answering questions.
+
+It's OK to not be an expert. Helping others is a great way to learn.
+If you make it clear you're not an expert, but are trying to help
+anyway, usually makes others appreciate your help even more.
+
+Some suggestions on doing support work:
+
+* Try to understand what the person needing help is actually trying to
+  achieve, rather than answering their literal question. Better yet,
+  do both.
+
+* You don't need to have the solution to respond. A quick, but
+  incomplete answer that nevertheless moves the discussion forward is
+  helpful. Even if you don't know the correct answer, it's good to ask
+  a question that results in the person needing help providing more
+  information, or finding the solution themselves, or inspires someone
+  else to discover the solution,
+
+* Always be helpful and polite. Never respond with things such as
+  "read the fine manual" (or RTFM for short). It's OK to say that the
+  answer is in the manual, but then provide a link, and possibly also
+  a quote.
+
+* People who need help are often frustrated, and sometimes desperate,
+  because they've tried and tried to solve the problem on their own,
+  but have failed. This can leak through their messages. Ignore it,
+  unless they actually become impolite, at which point its probably
+  best to escalate the situation. Avoid getting into a quarrel about
+  who's right or who said what and what did they mean by it.
+
+* It's better to not respond at all, than respond while irritated,
+  annoyed, or angry. It's more important for the project to maintain a
+  polite and helpful atmosphere in the long run than to solve any
+  current technical problem.
+
+In short, if you do your best to be polite, friendly, and helpful, go
+ahead and respond.
+
+
 Writing and updating documentation
 ----------------------------------
 
