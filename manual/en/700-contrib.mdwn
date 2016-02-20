@@ -107,6 +107,41 @@ ahead and respond.
 Writing and updating documentation
 ----------------------------------
 
+The project has various kinds of documentation.
+
+* The `obnam.org` website.
+* The manual page.
+* The manual (which is what you're reading now).
+* Various blog posts around the web.
+
+Writing documentation is fairly easy. Updating it takes a bit more
+effort, since it requires reviewing existing documentation to make
+sure it's up to date. The main goals of Obnam documentation are:
+
+* Accuracy.
+* Clarity.
+* Completeness.
+* A bit of dry humour in places.
+
+Any help you can give here is most welcome.
+
+* Read through existing documentation.
+* If you find anything that's wrong, inaccurate, incomplete, missing,
+  or unclear, send a note to the developer mailing list.
+* If you can include a new wording, all the better. It's not required.
+* If you can provide an actual patch, perfect, since it makes it
+  easiest to incorporate your suggestion. Again, it's not required.
+
+You don't need to be a good writer. As part of the process, others
+will review what you send, and will point out anything they feel can
+be improved. For example, suppose you notice that a paragraph in this
+manual is unclear, but you don't know what it actually should say. If
+you send a mail saying this, others can then come up with a better
+wording.
+
+Translating documentation
+-------------------------
+
 Developing the code
 -------------------
 
