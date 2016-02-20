@@ -156,5 +156,18 @@ nice.
 Developing the code
 -------------------
 
+Assuming you already know how to program, it's fairly straightforward
+to work on the Obnam code base. At least it's meant to be so: if you
+have trouble, please ask and point out what's unclear or wrong.
+
+Check out the source from the git server, and read the `README` file
+for details on how to get started, and how to run the automated test
+suite, and how to send patches. See the website for some development
+documentation, including explanations of the on-disk data structures.
+
+Code changes that are not very trivial should be sent in a form that
+can be handled by git. This can be actual patches sent to the mailing
+list, or a URL from which changes can be merged.
+
 Project governance
 ------------------
