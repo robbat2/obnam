@@ -177,4 +177,5 @@ of the project, Lars Wirzenius, has all the power, and everyone else
 has no power. As the project grows, this will change.
 
 If there's a social problem somewhere, for example someone is
-misbehaving, it's best to report it to Lars directly.
+misbehaving, it's best to report it to Lars directly. If Lars is the
+problem, it's best to call him out directly.
