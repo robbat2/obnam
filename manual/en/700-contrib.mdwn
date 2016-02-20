@@ -142,6 +142,13 @@ wording.
 Translating documentation
 -------------------------
 
+The Obnam manual and manual page are written in English, and have been
+translated to German. More languages are most welcome.
+
+The author of this manual is not particularly familiar with the
+process of translation, and so wishes someone else would fill in this
+section.
+
 Developing the code
 -------------------
 
