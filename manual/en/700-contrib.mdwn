@@ -1,0 +1,52 @@
+Participating in Obnam development
+==================================
+
+The Obnam project is quite small, as far as software projects go.
+There is one main developer, plus a few others who sometimes help out.
+It would be nice to have more people involved, and this chapter is an
+introduction for that.
+
+It is a common misunderstanding that only code matters in a software
+project. On the contrary, without a number of other things, code is
+useless, particularly so in a free software project, including Obnam.
+Examples of necessary things in almost any serious software project:
+
+* writing and updating documentation, which includes manuals and
+  websites
+* translating documentation, and the software's user interface
+* providing support to users with questions or problems
+* reporting actionable bugs
+* processing bug reports: asking for clarifications, reproducing the
+  reported problem, finding the cause of the problem, and developing a
+  suitable fix
+* porting the software to various platforms, including different
+  operating systems, different versions of said operating systems,
+  different versions of the languages and libraries the software uses,
+  different hardware, etc
+* quality assurance: developing and performing manual and automated
+  tests and benchmarks, and analysing results
+* hosting and operating web sites, mailing lists, IRC channels, other
+  communication channels
+* handling project governance, which includes dealing with conflicts
+  between people
+* managing the project in general, including making sure things don't
+  stall
+* finally, writing the code itself, which is a necessary, but not
+  sufficient part of having a project that people other than the
+  developers can use it
+
+This list is insufficient; additions are welcome. See the rest of this
+chapter for suggestions on how to contribute to the list.
+
+
+Helping support users
+---------------------
+
+Writing and updating documentation
+----------------------------------
+
+Developing the code
+-------------------
+
+Project governance
+------------------
