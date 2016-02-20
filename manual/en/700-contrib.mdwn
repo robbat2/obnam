@@ -149,6 +149,10 @@ The author of this manual is not particularly familiar with the
 process of translation, and so wishes someone else would fill in this
 section.
 
+The Obnam user interface is not currently translatable, and making it
+so will require code changes. Helping make those code changes would be
+nice.
+
 Developing the code
 -------------------
 
