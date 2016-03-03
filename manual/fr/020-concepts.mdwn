@@ -1,79 +1,83 @@
-You know you should
-===================
+Vous savez que vous devriez
+===========================
 
-This chapter is philosophical and theoretical about backups.
-It discusses why you should back up, various concepts around backups,
-what kinds of things you should think about when setting up backups
-and what to do in the long term (verification, etc). It also discusses
-some assumptions Obnam makes and some constraints it imposes.
+Ce chapitre est philosophique et théorique à propos des backups. Il
+traite des raisons pour lesquelles vous devriez faire des sauvegardes,
+les concepts fondamentaux, ce à quoi vous devez penser lorsque vous
+mettez en place vos sauvegardes et que faire au long terme
+(vérification, etc). Il mentionne également quelques hypothèses que fait
+Obnam et les contraintes que cela vous impose.
 
-Why backup?
------------
+Pourquoi sauvegarder ?
+----------------------
 
-FIXME: Add some horror stories here about why backups are important.
-With references/links.
+FIXME : Ajouter quelques histoires horrible ici qui prouvent que les
+sauvegardes sont importantes.
+Avec rérefences/liens.
 
-Backup concepts
----------------
+Les concepts des sauvegardes
+----------------------------
 
-This section covers core concepts in backups, and defines some
-terminology used in this book.
+Cette section couvre les concepts principaux des sauvegardes, et
+introduit la terminologie utilisée dans ce manuel.
 
-**Live data** is the data you work with or keep. It's the files on
-your hard drive: the documents you write, the photos you save, the
-unfinished novels you wish you'd finish.
+Les **données actives** sont les données sur lesquelles vous travaillez
+ou que vous conservez. Ce sont les fichiers sur votre disque dur : les
+documents que vous écrivez, les photos que vous enregistrez, les romans
+non terminés que vous espérer finir.
 
-Most live data is **precious** in that you'll be upset if you lose it.
-Some live data is not precious: your web browser cache probably isn't,
-for example. This distinction can let you limit the amount of data
-you need to back up, which can significantly reduce your backup costs.
+La plupart des données actives sont **précieuses**, c'est à dire que vous seriez contrarié si elles disparaissaient. Certains fichiers actifs ne sont pas précieux : le cache de votre navigateur web, par exemple. Cette distinction peut vous permettre de limiter la quantité de données que vous devez sauvegarder, ce qui diminue de manière significative le coût de vos sauvegardes.
 
-A **backup** is a spare copy of your live data. If you lose some
-or all of your live data, you can get it back ("**restore**") from
-your backup.  The backup copy is, by practical necessity, older than
-your live data, but if you made the backup recently enough, you won't
-lose much.
+Une **sauvegarde** est une copie supplémentaire de vos données actives.
+Si vous perdez une partie ou la totalité de vos fichiers actifs, vous
+pouvez les récupérer (**restaurer**) depuis vos sauvegardes. Cette copie
+de sauvegarde est, en pratique, plus vieille que vos données actives,
+mais si vous sauvegardez régulièrement, vous ne devriez jamais perdre
+grand chose.
 
-Sometimes it's useful to have more than one old backup copy of your
-live data.  You can have a sequence of backups, made at different
-times, giving you a **backup history**. Each copy of your live data
-in your backup history is a **generation**. This lets you retrieve a
-file you deleted a long time ago, but didn't realise you needed until
-now. If you only keep one backup version, you can't get it back,
-but if you keep, say, a daily backup for a month, you have a month
-to realise you need it, before it's lost forever.
+Des fois il est utile d'avoir plus qu'une seule copie de sauvegarde de
+vos données actives. Vous pouvez avoir une série de sauvegardes, faites
+à des moments différents, vous offrant un **historique de sauvegardes**.
+Chaque copie de vos données dans votre historique est une **génération**.
+Ceci vous permet de récupérer un fichier que vous avez supprimé il y a
+un certain temps, mais sans que vous le remarquiez jusqu'à présent. Si
+vous n'avez qu'une copie de sauvegarde, vous ne pouvez plus le
+récupérer, mais si vous avez par exemple une sauvegarde par jour sur un
+mois passé, vous avez un mois pour réaliser qu'il vous manque un fichier
+avec qu'il soit perdu pour toujours.
 
-The place your backups are stored is the **backup repository**. You can
-use many kinds of **backup media** for backup storage: hard drives,
-tapes, optical disks (DVD-R, DVD-RW, etc), USB flash drives, online
-storage, etc. Each type of medium has different characteristics:
-size, speed, convenience, reliability, price, which you'll need to
-balance for a backup solution that's reasonable for you.
+L'emplacement où vos sauvegardes sont stockées est le **dépôt de
+sauvegarde** (ndt : "backup repository"). Vous pouvez utiliser de
+nombreux types de **media de sauvegarde** pour le stocker : disque dur,
+disque option (DVD-R, CD-R, etc), clé USB, espace en ligne, etc. Chaque
+type de medium a différentes caractéristiques : taille, vitesse,
+commodité, fiabilité, prix, que vous devez prendre en compte pour
+choisir la solution la plus raisonnable pour vous.
 
-You may need multiple backup repositories or media, with one of
-them located **off-site**, away from where your computers normally
-live. Otherwise, if you house burns down, you'll lose all your
-backups too.
+Il est possible que vous ayez besoin de plusieurs dépôts ou media, l'un
+d'entre eux situé **hors-site**, loin de votre machines habituelles.
+Sinon, si votre maison brûle, vous perdez vos sauvegardes avec.
 
-You need to **verify** that your backups work. It would be awkward to
-go to the effort and expense of making backups and then not be able
-to restore your data when you need to. You may even want to test
-your **disaster recovery** by pretending that all your computer stuff
-is gone, except for the backup media. Can you still recover? You'll
-want to do this periodically, to make sure your backup system keeps
-working.
+Vous devez **vérifier** que vos sauvegardes marchent. Ce serait dommage
+de faire l'effort de sauvegarder régulièrement et ensuite de ne pas
+pouvoir les restaurer lorsque vous en avez besoin. Vous devriez sans
+doute tester votre **plan après sinistre** en imaginant que vos fichiers
+ont disparu, à l'exception de vos media de sauvegarde. Parvenez-vous à
+récupérer ? Vous devriez sans doute faire ceci régulièrement, pour être
+certain que votre solution de sauvegarde marche toujours.
 
-There is a very large variety of **backup tools**. They can be
-very simple and manual: you can copy files to a USB drive using
-your file manager, once a blue moon. They can also be very complex:
-enterprise backup products that cost huge amounts of money and come
-with a multi-day training package for your sysadmin team, and which
-require that team to function properly.
+Il y a un grande variété d'**outils de sauvegarde**. Ils peuvent être
+simples et manuels : copiez vos fichier sur une clé USB en utilisant
+votre explorateur de fichiers, tous les trente-six du mois. Ils peuvent
+aussi être très complexes : les produits de sauvegarde conçus pour les
+entreprises qui coûte énormément d'argent et incluent plusieurs jours de
+de formation pour votre IT, et qui nécessite une attention constante de
+la part de cette équipe.
 
-You'll need to define a **backup strategy** to tie everything
-together: what live data to back up, to what medium, using what
-tools, what kind of backup history to keep, and how to verify
-that they work.
+Vous devez définir une **stratégie de sauvegarde** pour tout relier
+ensemble : quelles données active sauvegarder, sur quel medium, en
+utilisant quel outils, quel historique conserver et comment vérifier que
+tout marche.
 
 Backup strategies
 -----------------
