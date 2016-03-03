@@ -137,8 +137,8 @@ protocol (part of SSH). You need the following to achieve this:
   exchange for having one of their machines at your place, so that you
   both can backup remotely.
   
-* An **ssh key** for logging into the server. You _can_ log in using
-  passwords too, but it is quite cumbersome.
+* An **ssh key** for logging into the server. Obnam does not currently
+  support logging in via passwords.
 
 * Enough disk space on the server to hold your backups.
 
@@ -356,6 +356,29 @@ duplicate data is quite coarse (see the  `--chunk-size` setting), and
 so Obnam often doesn't find duplication when it exists, when the
 changes are small.
 
+De-duplication isn't useful in the following scenarios:
+
+* A file changes such that things move around within the file. The
+  (current) Obnam de-duplication is based on non-overlapping chunks
+  from the beginning of a file. If some data is inserted, Obnam won't
+  notice that the chunks have shifted around. This can happen, for
+  example, for disk or ISO images.
+
+* Files with duplicate data that is not on a chunk boundary. For
+  example, emails with large attachments. Each email recipient gets
+  different `Received` headers, which shifts the body and attachments
+  by different amounts. As a result, Obnam won't notice the
+  duplication.
+
+* Data in compressed files, such as `.zip` or `.tar.xz` files. Obnam
+  doesn't know about the file compression, and only sees the
+  compressed version of the data. Thus, Obnam won'd de-duplicate it.
+
+A future version of Obnam will hopefully improve the de-duplication
+algorithms. If you see this optimistic paragraph in a version of Obnam
+released in 2017 or later, please notify the maintainers. Thank you.
+
+
 De-duplication and safety against checksum collisions
 -----------------------------------------------------
 
@@ -428,27 +451,18 @@ happen if Obnam is interrupted by the user before it's finished.
 
 The Obnam command `force-lock` deals with this situation. It is
 dangerous, though. If you force open a lock that is in active use by
-a running Obnam instance, there will likely to be some stepping of
-toes. The result may, in extreme cases, even result in repository
-corruption. So be careful.
+any running Obnam instance, on any client machine using that
+repository, there will likely to be some stepping of toes. The result
+may, in extreme cases, even result in repository corruption. So be
+careful.
 
 If you've decided you can safely do it, this is an example of how to
 do it:
 
     obnam -r /media/backups/tomjon-repo force-lock
 
-Note that some of the locks are per-client, to prevent you from
-accidentally running Obnam twice for the same client, which would
-result in standing on your own toes: kind of impressive, but
-uncomfortable and not recommended.
-
-If you need to force open a lock for specific client, you can specify
-the client name explicitly:
-
-    obnam --client-name magrat \
-        -r /media/backups/tomjon-repo force-lock
-
-(Long line broken to two for typographical reasons.)
+It is not currently possibly to only break locks related to one
+client.
 
 Consistency of live data
 ------------------------
