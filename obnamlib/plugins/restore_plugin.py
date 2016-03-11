@@ -253,7 +253,7 @@ class RestorePlugin(obnamlib.ObnamPlugin):
             self.hardlinks.forget(metadata)
 
     def restore_symlink(self, gen, filename, metadata):
-        logging.debug('restoring symlink %s', filename)
+        logging.debug('restoring symlink %r -> %r', filename, metadata.target)
 
     def restore_first_link(self, gen, filename, metadata):
         if stat.S_ISREG(metadata.st_mode):
