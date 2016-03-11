@@ -764,10 +764,15 @@ class RepositoryInterface(object):
         '''
 
         allowed = set(self.get_allowed_file_keys())
+        used = set()
         for key, field in obnamlib.metadata_file_key_mapping:
             if key in allowed:
                 self.set_file_key(
                     generation_id, filename, key, getattr(metadata, field))
+                used.add(key)
+
+        for key in allowed.difference(used):
+            self.set_file_key(generation_id, filename, key, None)
 
     def get_file_chunk_ids(self, generation_id, filename):
 
