@@ -851,7 +851,7 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
         # field names. This simplifies code (at the cost of a little
         # magic) in the file key getting and setting code.
         self._file_keys = {
-            obnamlib.REPO_FILE_TEST_KEY: 'target',
+            obnamlib.REPO_FILE_TEST_KEY: 'test',
             obnamlib.REPO_FILE_MODE: 'st_mode',
             obnamlib.REPO_FILE_MTIME_SEC: 'st_mtime_sec',
             obnamlib.REPO_FILE_MTIME_NSEC: 'st_mtime_nsec',

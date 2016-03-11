@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015  Lars Wirzenius
+# Copyright (C) 2009-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ metadata_verify_fields = (
 )
 metadata_fields = metadata_verify_fields + (
     'st_blocks', 'st_dev', 'st_gid', 'st_ino', 'st_atime_sec',
-    'st_atime_nsec', 'md5',
+    'st_atime_nsec', 'md5', 'test',
 )
 
 
