@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,19 +41,21 @@ class GADirectory(object):
         self._dict = a_dict
 
     def add_file(self, basename):
-        self._require_mutable()
-        self._dict['metadata'][basename] = {
-            'chunk-ids': [],
-        }
+        if basename not in self._dict['metadata']:
+            self._require_mutable()
+            self._dict['metadata'][basename] = {
+                'chunk-ids': [],
+            }
 
     def _require_mutable(self):
         if not self._mutable:
             raise GAImmutableError()
 
     def remove_file(self, basename):
-        self._require_mutable()
         if basename in self._dict['metadata']:
-            del self._dict['metadata'][basename]
+            self._require_mutable()
+            if basename in self._dict['metadata']:
+                del self._dict['metadata'][basename]
 
     def get_file_basenames(self):
         return self._dict['metadata'].keys()
@@ -63,9 +65,11 @@ class GADirectory(object):
         return self._dict['metadata'][basename].get(key_name)
 
     def set_file_key(self, basename, key, value):
-        self._require_mutable()
         key_name = obnamlib.repo_key_name(key)
-        self._dict['metadata'][basename][key_name] = value
+        old_value = self._dict['metadata'][basename].get(key_name, None)
+        if value != old_value:
+            self._require_mutable()
+            self._dict['metadata'][basename][key_name] = value
 
     def get_file_chunk_ids(self, basename):
         return self._dict['metadata'][basename]['chunk-ids']

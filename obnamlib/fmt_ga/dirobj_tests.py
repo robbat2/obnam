@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ class GADirectoryTests(unittest.TestCase):
 
     def test_raises_error_if_immutable_and_file_is_removed(self):
         dir_obj = obnamlib.GADirectory()
+        dir_obj.add_file('README')
         dir_obj.set_immutable()
         self.assertRaises(
             obnamlib.GAImmutableError,

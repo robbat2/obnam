@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -605,13 +605,17 @@ class GAFileMetadata(object):
                 filename, obnamlib.REPO_FILE_MODE, file_metadata.st_mode)
             self._flush_added_file(filename)
 
-        dir_obj, basename = self._get_mutable_dir_obj(filename)
-        if not dir_obj:
+        dir_obj, _, basename = self._get_dir_obj(filename)
+        if dir_obj is None:
             return False
 
         for key, field in obnamlib.metadata_file_key_mapping:
             value = getattr(file_metadata, field)
-            dir_obj.set_file_key(basename, key, value)
+            old_value = dir_obj.get_file_key(basename, key)
+            if value != old_value:
+                if not dir_obj.is_mutable():
+                    dir_obj, basename = self._get_mutable_dir_obj(filename)
+                dir_obj.set_file_key(basename, key, value)
 
         return True
 
@@ -622,10 +626,13 @@ class GAFileMetadata(object):
                 self._flush_added_file(filename)
             return True
         else:
-            dir_obj, basename = self._get_mutable_dir_obj(filename)
-            if not dir_obj:
+            immutable, _, basename = self._get_dir_obj(filename)
+            if not immutable:
                 return False
-            dir_obj.set_file_key(basename, key, value)
+            old_value = immutable.get_file_key(basename, key)
+            if old_value != value:
+                mutable, basename2 = self._get_mutable_dir_obj(filename)
+                mutable.set_file_key(basename2, key, value)
         return True
 
     def _get_mutable_dir_obj(self, filename):
