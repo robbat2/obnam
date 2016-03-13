@@ -32,6 +32,9 @@ class BagStore(object):
         self._id_inventor.set_filename_maker(self._make_bag_filename)
 
     def _make_bag_filename(self, bag_id):
+        if isinstance(bag_id, str):
+            return os.path.join(self._dirname, '%s.bag' % bag_id)
+
         basename = '%016x' % bag_id
         return os.path.join(
             self._dirname,

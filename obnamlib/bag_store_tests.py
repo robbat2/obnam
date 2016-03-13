@@ -74,3 +74,9 @@ class BagStoreTests(unittest.TestCase):
         self.store.put_bag(self.bag)
         self.store.remove_bag(self.bag.get_id())
         self.assertEqual(list(self.store.get_bag_ids()), [])
+
+    def test_puts_bag_with_nonnumeric_id(self):
+        self.bag.set_id('well-known')
+        self.store.put_bag(self.bag)
+        returned = self.store.get_bag('well-known')
+        self.assertEqualBags(returned, self.bag)

@@ -64,6 +64,19 @@ class BlobStore(object):
         bag.set_id(self._bag_store.reserve_bag_id())
         return bag
 
+    def get_well_known_blob(self, well_known_name):
+        if self._bag_store.has_bag(well_known_name):
+            bag = self._bag_store.get_bag(well_known_name)
+            if len(bag) > 0:
+                return bag[0]
+        return None
+
+    def put_well_known_blob(self, well_known_name, blob):
+        bag = obnamlib.Bag()
+        bag.set_id(well_known_name)
+        bag.append(blob)
+        self._bag_store.put_bag(bag)
+
     def flush(self):
         if self._bag is not None:
             self._bag_store.put_bag(self._bag)

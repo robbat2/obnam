@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ class Bag(object):
         return self._bag_id
 
     def set_id(self, bag_id):
+        assert isinstance(bag_id, (int, long, str))
         self._bag_id = bag_id
 
     def append(self, blob):
@@ -55,6 +56,9 @@ class BagIdNotSetError(obnamlib.ObnamError):
 
 
 def make_object_id(bag_id, object_index):
+    if isinstance(bag_id, str):
+        assert object_index == 0
+        return '%s.%d' % (bag_id, object_index)
     return '%016x.%d' % (bag_id, object_index)
 
 

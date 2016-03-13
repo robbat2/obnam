@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,10 +27,15 @@ class BagTests(unittest.TestCase):
         bag = obnamlib.Bag()
         self.assertEqual(bag.get_id(), None)
 
-    def test_sets_bag_id(self):
+    def test_sets_bag_id_to_integer(self):
         bag = obnamlib.Bag()
         bag.set_id(123)
         self.assertEqual(bag.get_id(), 123)
+
+    def test_sets_bag_id_to_string(self):
+        bag = obnamlib.Bag()
+        bag.set_id('well-known')
+        self.assertEqual(bag.get_id(), 'well-known')
 
     def test_is_empty_initially(self):
         bag = obnamlib.Bag()
@@ -60,6 +65,12 @@ class BagTests(unittest.TestCase):
         bag.set_id(1)
         object_id = bag.append('foo')
         self.assertEqual(object_id, obnamlib.make_object_id(1, 0))
+
+    def test_appending_returns_object_id_when_bag_id_is_a_string(self):
+        bag = obnamlib.Bag()
+        bag.set_id('well-known')
+        object_id = bag.append('foo')
+        self.assertEqual(object_id, obnamlib.make_object_id('well-known', 0))
 
 
 class ObjectIdTests(unittest.TestCase):

@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -97,6 +97,30 @@ class BlobStoreTests(unittest.TestCase):
 
         retrieved = blob_store.get_blob(blob_id)
         self.assertEqual(blob, retrieved)
+
+    def test_returns_None_if_well_known_blog_does_not_exist(self):
+        bag_store = DummyBagStore()
+        well_known_id = 'bobby'
+
+        blob_store = obnamlib.BlobStore()
+        blob_store.set_bag_store(bag_store)
+        retrieved = blob_store.get_well_known_blob(well_known_id)
+        self.assertEqual(retrieved, None)
+
+    def test_puts_well_known_blob(self):
+        bag_store = DummyBagStore()
+        well_known_blob = 'Bob'
+        well_known_id = 'bobby'
+
+        blob_store = obnamlib.BlobStore()
+        blob_store.set_bag_store(bag_store)
+        blob_store.set_max_bag_size(len(well_known_blob) + 1)
+        returned_id = blob_store.put_well_known_blob(
+            well_known_id, well_known_blob)
+        self.assertEqual(returned_id, None)
+
+        retrieved = blob_store.get_well_known_blob(well_known_id)
+        self.assertEqual(well_known_blob, retrieved)
 
 
 class DummyBagStore(object):
