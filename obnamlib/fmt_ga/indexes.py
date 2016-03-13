@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import obnamlib
 
 class GAChunkIndexes(object):
 
+    _well_known_blob = 'root'
+
     def __init__(self):
         self._fs = None
         self.set_dirname('chunk-indexes')
@@ -50,17 +52,24 @@ class GAChunkIndexes(object):
 
     def _save_data(self):
         blob = obnamlib.serialise_object(self._data)
-        filename = self._get_filename()
-        self._fs.overwrite_file(filename, blob)
+
+        bag_store = obnamlib.BagStore()
+        bag_store.set_location(self._fs, self.get_dirname())
+
+        blob_store = obnamlib.BlobStore()
+        blob_store.set_bag_store(bag_store)
+        blob_store.put_well_known_blob(self._well_known_blob, blob)
 
     def _load_data(self):
         if not self._data_is_loaded:
-            filename = self._get_filename()
-            if self._fs.exists(filename):
-                blob = self._fs.cat(filename)
-                self._data = obnamlib.deserialise_object(blob)
-                assert self._data is not None
-            else:
+            bag_store = obnamlib.BagStore()
+            bag_store.set_location(self._fs, self.get_dirname())
+
+            blob_store = obnamlib.BlobStore()
+            blob_store.set_bag_store(bag_store)
+            blob = blob_store.get_well_known_blob(self._well_known_blob)
+
+            if blob is None:
                 self._data = {
                     'by_chunk_id': {
                     },
@@ -70,6 +79,10 @@ class GAChunkIndexes(object):
                     'used_by': {
                     },
                 }
+            else:
+                self._data = obnamlib.deserialise_object(blob)
+                assert self._data is not None
+
             self._data_is_loaded = True
 
     def _get_filename(self):
