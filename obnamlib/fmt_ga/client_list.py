@@ -17,13 +17,14 @@
 
 
 import errno
-import os
 import random
 
 import obnamlib
 
 
 class GAClientList(object):
+
+    _well_known_blob = 'root'
 
     def __init__(self):
         self._hooks = None
@@ -62,11 +63,13 @@ class GAClientList(object):
     def _save_data(self):
         assert self._data is not None
         blob = obnamlib.serialise_object(self._data)
-        filename = self._get_filename()
-        self._fs.overwrite_file(filename, blob)
 
-    def _get_filename(self):
-        return os.path.join(self.get_dirname(), 'data.dat')
+        bag_store = obnamlib.BagStore()
+        bag_store.set_location(self._fs, self.get_dirname())
+
+        blob_store = obnamlib.BlobStore()
+        blob_store.set_bag_store(bag_store)
+        blob_store.put_well_known_blob(self._well_known_blob, blob)
 
     def get_client_names(self):
         self._load_data()
@@ -79,16 +82,23 @@ class GAClientList(object):
             assert self._data is not None
         else:
             assert self._data is None
+
         if not self._data_is_loaded:
-            filename = self._get_filename()
-            if self._fs.exists(filename):
-                blob = self._fs.cat(filename)
-                self._data = obnamlib.deserialise_object(blob)
-                assert self._data is not None
-            else:
+            bag_store = obnamlib.BagStore()
+            bag_store.set_location(self._fs, self.get_dirname())
+
+            blob_store = obnamlib.BlobStore()
+            blob_store.set_bag_store(bag_store)
+            blob = blob_store.get_well_known_blob(self._well_known_blob)
+
+            if blob is None:
                 self._data = {
                     'clients': {},
                 }
+            else:
+                self._data = obnamlib.deserialise_object(blob)
+                assert self._data is not None
+
             self._data_is_loaded = True
 
     def get_client_dirname(self, client_name):
