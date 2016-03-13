@@ -19,6 +19,33 @@
 import obnamlib
 
 
+_short_key_names = {
+    obnamlib.REPO_FILE_TEST_KEY: 'T',
+    obnamlib.REPO_FILE_USERNAME: 'U',
+    obnamlib.REPO_FILE_GROUPNAME: 'G',
+    obnamlib.REPO_FILE_SYMLINK_TARGET: 'S',
+    obnamlib.REPO_FILE_XATTR_BLOB: 'X',
+    obnamlib.REPO_FILE_MD5: '5',
+    obnamlib.REPO_FILE_MODE: 'M',
+    obnamlib.REPO_FILE_MTIME_SEC: 'ms',
+    obnamlib.REPO_FILE_MTIME_NSEC: 'mn',
+    obnamlib.REPO_FILE_ATIME_SEC: 'as',
+    obnamlib.REPO_FILE_ATIME_NSEC: 'an',
+    obnamlib.REPO_FILE_NLINK: 'N',
+    obnamlib.REPO_FILE_SIZE: 's',
+    obnamlib.REPO_FILE_UID: 'u',
+    obnamlib.REPO_FILE_GID: 'g',
+    obnamlib.REPO_FILE_BLOCKS: 'B',
+    obnamlib.REPO_FILE_DEV: 'D',
+    obnamlib.REPO_FILE_INO: 'I',
+}
+
+# Let's make sure we have no duplicate values.
+assert len(_short_key_names) == len(_short_key_names.values())
+
+_key_from_short = dict((v, k) for k, v in _short_key_names.items())
+
+
 class GADirectory(object):
 
     def __init__(self):
@@ -61,15 +88,30 @@ class GADirectory(object):
         return self._dict['metadata'].keys()
 
     def get_file_key(self, basename, key):
-        key_name = obnamlib.repo_key_name(key)
-        return self._dict['metadata'][basename].get(key_name)
+        short_name = self.get_short_key_name(key)
+        return self._dict['metadata'][basename].get(short_name)
 
     def set_file_key(self, basename, key, value):
-        key_name = obnamlib.repo_key_name(key)
-        old_value = self._dict['metadata'][basename].get(key_name, None)
+        short_name = self.get_short_key_name(key)
+        old_value = self._dict['metadata'][basename].get(short_name, None)
         if value != old_value:
             self._require_mutable()
-            self._dict['metadata'][basename][key_name] = value
+            self._dict['metadata'][basename][short_name] = value
+
+    def get_short_key_name(self, key):
+        '''Translate a key id to a short key name.
+
+        This is similar to obnamlib.repo_key_name, but the name is
+        guaranteed to be short, while still being unique. The length
+        matters, as these names will be used a lot.
+
+        '''
+
+        return _short_key_names[key]
+
+    def get_key_from_short_name(self, short_name):
+        '''Inverse of get_short_key_name.'''
+        return _key_from_short[short_name]
 
     def get_file_chunk_ids(self, basename):
         return self._dict['metadata'][basename]['chunk-ids']

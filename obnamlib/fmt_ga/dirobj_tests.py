@@ -72,6 +72,14 @@ class GADirectoryTests(unittest.TestCase):
             obnamlib.GAImmutableError,
             dir_obj.remove_file, 'README')
 
+    def test_maps_file_key_to_short_name_and_back(self):
+        key = obnamlib.REPO_FILE_SIZE
+
+        dir_obj = obnamlib.GADirectory()
+        short = dir_obj.get_short_key_name(key)
+        key2 = dir_obj.get_key_from_short_name(short)
+        self.assertEqual(key, key2)
+
     def test_gets_file_key_when_unset(self):
         dir_obj = obnamlib.GADirectory()
         dir_obj.add_file('README')
