@@ -25,6 +25,8 @@ import obnamlib
 
 class GAClient(object):
 
+    _well_known_blob = 'root'
+
     def __init__(self, client_name):
         self._fs = None
         self._dirname = None
@@ -101,8 +103,8 @@ class GAClient(object):
             'generations': [g.as_dict() for g in self._generations],
         }
         blob = obnamlib.serialise_object(data)
-        filename = self._get_filename()
-        self._fs.overwrite_file(filename, blob)
+        blob_store = self._get_blob_store()
+        blob_store.put_well_known_blob(self._well_known_blob, blob)
 
     def _load_data(self):
         if not self._data_is_loaded:
@@ -112,18 +114,15 @@ class GAClient(object):
             self._data_is_loaded = True
 
     def _load_per_client_data(self):
-        filename = self._get_filename()
-        if self._fs.exists(filename):
-            blob = self._fs.cat(filename)
+        blob_store = self._get_blob_store()
+        blob = blob_store.get_well_known_blob(self._well_known_blob)
+        if blob is not None:
             data = obnamlib.deserialise_object(blob)
             self._client_keys.set_from_dict(data['keys'])
             for gen_dict in data['generations']:
                 gen = GAGeneration()
                 gen.set_from_dict(gen_dict)
                 self._generations.append(gen)
-
-    def _get_filename(self):
-        return os.path.join(self.get_dirname(), 'data.dat')
 
     def _load_file_metadata(self):
         blob_store = self._get_blob_store()
