@@ -352,13 +352,14 @@ class GAClient(object):
 
     def get_generation_chunk_ids(self, gen_number):
         self._load_data()
-        chunk_ids = set()
         generation = self._lookup_generation_by_gen_number(gen_number)
         metadata = generation.get_file_metadata()
-        for filename in metadata:
-            file_chunk_ids = metadata.get_file_chunk_ids(filename)
-            chunk_ids = chunk_ids.union(set(file_chunk_ids))
-        return list(chunk_ids)
+        sets = [
+            set(metadata.get_file_chunk_ids(filename))
+            for filename in metadata
+        ]
+        union = set().union(*sets)
+        return list(union)
 
     def get_file_children(self, gen_number, filename):
         self._load_data()
