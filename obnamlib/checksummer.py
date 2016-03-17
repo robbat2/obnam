@@ -21,21 +21,31 @@ import hashlib
 import obnamlib
 
 
-_algorithms = {
-    'sha224': hashlib.sha224,
-    'sha256': hashlib.sha256,
-    'sha384': hashlib.sha384,
-    'sha512': hashlib.sha512,
-}
+_algorithm_list = [
+    ('md5', obnamlib.REPO_FILE_MD5, hashlib.md5),
+    ('sha224', obnamlib.REPO_FILE_SHA224, hashlib.sha224),
+    ('sha256', obnamlib.REPO_FILE_SHA256, hashlib.sha256),
+    ('sha384', obnamlib.REPO_FILE_SHA384, hashlib.sha384),
+    ('sha512', obnamlib.REPO_FILE_SHA512, hashlib.sha512),
+]
 
 
-checksum_algorithms = _algorithms.keys()
+checksum_algorithms = [name for name, _, _ in _algorithm_list]
 
 
-def get_checksum_algorithm(name):
-    if name in _algorithms:
-        return _algorithms[name]()
-    raise UnknownChecksumAlgorithm(algorithm=name)
+def get_checksum_algorithm(wanted):
+    for name, _, func in _algorithm_list:
+        if wanted == name:
+            return func()
+    raise UnknownChecksumAlgorithm(algorithm=wanted)
+
+
+def get_checksum_algorithm_name(wanted_key):
+    for name, key, _ in _algorithm_list:
+        if key == wanted_key:
+            return name
+    raise UnknownChecksumAlgorithm(
+        algorithm=obnamlib.repo_key_name(wanted_key))
 
 
 class UnknownChecksumAlgorithm(obnamlib.ObnamError):

@@ -56,6 +56,10 @@ REPO_FILE_GROUPNAME = _get_next_id()
 REPO_FILE_SYMLINK_TARGET = _get_next_id()
 REPO_FILE_XATTR_BLOB = _get_next_id()
 REPO_FILE_MD5 = _get_next_id()
+REPO_FILE_SHA224 = _get_next_id()
+REPO_FILE_SHA256 = _get_next_id()
+REPO_FILE_SHA384 = _get_next_id()
+REPO_FILE_SHA512 = _get_next_id()
 
 _MAX_STRING_KEY = REPO_FILE_MD5
 

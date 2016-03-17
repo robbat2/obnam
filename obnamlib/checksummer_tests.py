@@ -31,6 +31,16 @@ class TestGetChecksummer(unittest.TestCase):
         self.assertRaises(
             obnamlib.ObnamError, obnamlib.get_checksum_algorithm, 'unknown')
 
+    def test_knows_file_key_for_sha512(self):
+        self.assertEqual(
+            obnamlib.get_checksum_algorithm_name(obnamlib.REPO_FILE_SHA512),
+            'sha512')
+
+    def test_raises_error_if_algorithm_is_unknown_for_key(self):
+        self.assertRaises(
+            obnamlib.ObnamError,
+            obnamlib.get_checksum_algorithm_name, -1)
+
     def test_returns_working_sha512(self):
         summer = obnamlib.get_checksum_algorithm('sha512')
         summer.update('hello, world')

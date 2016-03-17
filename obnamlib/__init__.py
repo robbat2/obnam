@@ -73,8 +73,6 @@ from .encryption import (
     EncryptionError,
     GpgError)
 
-from .checksummer import checksum_algorithms, get_checksum_algorithm
-
 from .hooks import (
     Hook, MissingFilterError, NoFilterTagError, FilterHook, HookManager)
 from .pluginbase import ObnamPlugin
@@ -152,8 +150,20 @@ from .repo_interface import (
     REPO_FILE_DEV,
     REPO_FILE_INO,
     REPO_FILE_MD5,
+    REPO_FILE_SHA224,
+    REPO_FILE_SHA256,
+    REPO_FILE_SHA384,
+    REPO_FILE_SHA512,
     REPO_FILE_INTEGER_KEYS,
     metadata_file_key_mapping)
+
+from .checksummer import (
+    checksum_algorithms,
+    get_checksum_algorithm,
+    get_checksum_algorithm_name,
+)
+
+from .whole_file_checksummer import WholeFileCheckSummer
 
 from .delegator import RepositoryDelegator, GenerationId
 
