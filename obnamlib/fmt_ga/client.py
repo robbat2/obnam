@@ -53,6 +53,11 @@ class GAClient(object):
     def set_default_checksum_algorithm(self, name):
         self._default_checksum_algorithm = name
 
+    def get_client_checksum_key(self):
+        self._load_data()
+        assert self._checksum_algorithm is not None
+        return obnamlib.get_checksum_algorithm_key(self._checksum_algorithm)
+
     def set_dir_bag_size(self, size):
         self._dir_bag_size = size
         if self._blob_store:

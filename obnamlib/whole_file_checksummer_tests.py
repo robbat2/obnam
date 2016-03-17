@@ -25,7 +25,7 @@ class WholeFileCheckSummerTests(unittest.TestCase):
 
     def test_computes_nothing_if_repo_wants_no_checksum(self):
         repo = FakeRepository(None)
-        summer = obnamlib.WholeFileCheckSummer(repo)
+        summer = obnamlib.WholeFileCheckSummer(None)
         chunk = 'hello'
         token = repo.prepare_chunk_for_indexes(chunk)
         summer.append_chunk(chunk, token)
@@ -33,7 +33,7 @@ class WholeFileCheckSummerTests(unittest.TestCase):
 
     def test_computes_checksum_for_md5(self):
         repo = FakeRepository(obnamlib.REPO_FILE_MD5)
-        summer = obnamlib.WholeFileCheckSummer(repo)
+        summer = obnamlib.WholeFileCheckSummer(obnamlib.REPO_FILE_MD5)
         chunk = 'hello'
         token = repo.prepare_chunk_for_indexes(chunk)
         summer.append_chunk(chunk, token)
@@ -43,7 +43,7 @@ class WholeFileCheckSummerTests(unittest.TestCase):
 
     def test_computes_checksum_for_sha512(self):
         repo = FakeRepository(obnamlib.REPO_FILE_SHA512)
-        summer = obnamlib.WholeFileCheckSummer(repo)
+        summer = obnamlib.WholeFileCheckSummer(obnamlib.REPO_FILE_SHA512)
         chunk = 'hello'
         token = repo.prepare_chunk_for_indexes(chunk)
         summer.append_chunk(chunk, token)
@@ -58,7 +58,7 @@ class FakeRepository(object):
     def __init__(self, file_key):
         self._file_key = file_key
 
-    def get_file_checksum_key(self):
+    def get_client_checksum_key(self, client_name):
         return self._file_key
 
     def prepare_chunk_for_indexes(self, data):

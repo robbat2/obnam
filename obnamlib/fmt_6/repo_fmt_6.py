@@ -993,6 +993,9 @@ class RepositoryFormat6(obnamlib.RepositoryInterface):
                 client_name=client_name,
                 key_name=obnamlib.repo_key_name(key))
 
+    def get_client_checksum_key(self, client_name):
+        return obnamlib.REPO_FILE_MD5
+
     def get_file_chunk_ids(self, generation_id, filename):
         self._require_existing_file(generation_id, filename)
         client_name, gen_number = self._unpack_gen_id(generation_id)

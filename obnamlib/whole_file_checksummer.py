@@ -35,11 +35,10 @@ class WholeFileCheckSummer(object):
 
     '''
 
-    def __init__(self, repo):
-        self._summer = self._create_checksum_algorithm(repo)
+    def __init__(self, file_key):
+        self._summer = self._create_checksum_algorithm(file_key)
 
-    def _create_checksum_algorithm(self, repo):
-        file_key = repo.get_file_checksum_key()
+    def _create_checksum_algorithm(self, file_key):
         if file_key is None:
             return _NullChecksum()
         name = obnamlib.get_checksum_algorithm_name(file_key)

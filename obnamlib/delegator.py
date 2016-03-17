@@ -267,6 +267,10 @@ class RepositoryDelegator(obnamlib.RepositoryInterface):
         return client.set_file_keys_from_metadata(
             generation_id.gen_number, filename, metadata)
 
+    def get_client_checksum_key(self, client_name):
+        client = self._lookup_client(client_name)
+        return client.get_client_checksum_key()
+
     def get_file_chunk_ids(self, generation_id, filename):
         client = self._lookup_client_by_generation(generation_id)
         return client.get_file_chunk_ids(generation_id.gen_number, filename)

@@ -575,6 +575,10 @@ class RepositoryInterface(object):
         '''Return list of allowed per-client keys for thist format.'''
         raise NotImplementedError()
 
+    def get_client_checksum_key(self, client_name):
+        '''Return file key for preferred checksum for client, or None.'''
+        raise NotImplementedError()
+
     def get_client_key(self, client_name, key):
         '''Return current value of a key for a given client.
 
@@ -779,7 +783,6 @@ class RepositoryInterface(object):
             self.set_file_key(generation_id, filename, key, None)
 
     def get_file_chunk_ids(self, generation_id, filename):
-
         '''Get the list of chunk ids for a file.'''
         raise NotImplementedError()
 
@@ -1944,6 +1947,17 @@ class RepositoryInterfaceTests(unittest.TestCase):  # pragma: no cover
         value_2 = self.repo.get_file_key(
             gen_id_2, '/foo/bar', obnamlib.REPO_FILE_SYMLINK_TARGET)
         self.assertEqual(value_2, 'second')
+
+    def test_returns_an_acceptable_checksum_file_key_or_none(self):
+        self.setup_client()
+        self.assertTrue(
+            self.repo.get_client_checksum_key('fooclient') in
+            [None,
+             obnamlib.REPO_FILE_MD5,
+             obnamlib.REPO_FILE_SHA224,
+             obnamlib.REPO_FILE_SHA256,
+             obnamlib.REPO_FILE_SHA384,
+             obnamlib.REPO_FILE_SHA512])
 
     def test_new_file_has_no_chunk_ids(self):
         gen_id = self.create_generation()
