@@ -36,9 +36,8 @@ class WholeFileCheckSummerTests(unittest.TestCase):
         repo = FakeRepository(obnamlib.REPO_FILE_MD5)
         summer = obnamlib.WholeFileCheckSummer(obnamlib.REPO_FILE_MD5)
         chunk = 'hello'
-        token = repo.prepare_chunk_for_indexes(chunk)
         chunk_id = None
-        summer.append_chunk(chunk, token)
+        summer.append_chunk(chunk, chunk_id)
         self.assertEqual(
             summer.get_checksum(),
             '5d41402abc4b2a76b9719d911017c592')
