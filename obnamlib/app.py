@@ -93,7 +93,8 @@ class App(cliapp.Application):
             metavar='FORMAT')
 
         algos = list(obnamlib.checksum_algorithms)
-        algos.remove('sha512')
+        algos.remove('sha512')  # We move this first in the list, default.
+        algos.remove('md5')  # We're NOT letting the user choose MD5.
         algos = ['sha512'] + algos
         self.settings.choice(
             ['checksum-algorithm'],
