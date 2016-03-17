@@ -27,10 +27,10 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
         obnamlib.RepositoryDelegator.__init__(self, **kwargs)
 
         self.set_client_list_object(obnamlib.GAClientList())
-        self.set_client_factory(obnamlib.GAClient)
+        self.set_client_factory(self._client_factory)
 
         self.set_chunk_indexes_object(obnamlib.GAChunkIndexes())
-        assert 'checksum_algorithm' in kwargs
+        self._checksum_algorithm = kwargs['checksum_algorithm']
         self._chunk_indexes.set_default_checksum_algorithm(
             kwargs['checksum_algorithm'])
 
@@ -40,6 +40,11 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
         if 'chunk_cache_size' in kwargs:  # pragma: no cover
             chunk_store.set_chunk_cache_size(kwargs['chunk_cache_size'])
         self.set_chunk_store_object(chunk_store)
+
+    def _client_factory(self, client_name):
+        client = obnamlib.GAClient(client_name)
+        client.set_default_checksum_algorithm(self._checksum_algorithm)
+        return client
 
     def init_repo(self):
         pass

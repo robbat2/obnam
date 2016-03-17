@@ -32,6 +32,7 @@ class GAClient(object):
         self._dirname = None
         self._client_name = client_name
         self._current_time = None
+        self._default_checksum_algorithm = None
         self.clear()
 
     def clear(self):
@@ -41,12 +42,16 @@ class GAClient(object):
         self._data_is_loaded = False
         self._dir_cache_size = obnamlib.DEFAULT_DIR_CACHE_BYTES
         self._dir_bag_size = obnamlib.DEFAULT_DIR_BAG_BYTES
+        self._checksum_algorithm = None
 
     def set_current_time(self, current_time):
         self._current_time = current_time
 
     def set_fs(self, fs):
         self._fs = fs
+
+    def set_default_checksum_algorithm(self, name):
+        self._default_checksum_algorithm = name
 
     def set_dir_bag_size(self, size):
         self._dir_bag_size = size
@@ -99,6 +104,7 @@ class GAClient(object):
 
     def _save_per_client_data(self):
         data = {
+            'whole-file-checksum': self._checksum_algorithm,
             'keys': self._client_keys.as_dict(),
             'generations': [g.as_dict() for g in self._generations],
         }
@@ -116,8 +122,11 @@ class GAClient(object):
     def _load_per_client_data(self):
         blob_store = self._get_blob_store()
         blob = blob_store.get_well_known_blob(self._well_known_blob)
-        if blob is not None:
+        if blob is None:
+            self._checksum_algorithm = self._default_checksum_algorithm
+        else:
             data = obnamlib.deserialise_object(blob)
+            self._checksum_algorithm = data['whole-file-checksum']
             self._client_keys.set_from_dict(data['keys'])
             for gen_dict in data['generations']:
                 gen = GAGeneration()
