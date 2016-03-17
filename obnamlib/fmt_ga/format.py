@@ -94,23 +94,29 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
             ]
 
     def get_allowed_file_keys(self):
-        return [obnamlib.REPO_FILE_TEST_KEY,
-                obnamlib.REPO_FILE_MODE,
-                obnamlib.REPO_FILE_MTIME_SEC,
-                obnamlib.REPO_FILE_MTIME_NSEC,
-                obnamlib.REPO_FILE_ATIME_SEC,
-                obnamlib.REPO_FILE_ATIME_NSEC,
-                obnamlib.REPO_FILE_NLINK,
-                obnamlib.REPO_FILE_SIZE,
-                obnamlib.REPO_FILE_UID,
-                obnamlib.REPO_FILE_USERNAME,
-                obnamlib.REPO_FILE_GID,
-                obnamlib.REPO_FILE_GROUPNAME,
-                obnamlib.REPO_FILE_SYMLINK_TARGET,
-                obnamlib.REPO_FILE_XATTR_BLOB,
-                obnamlib.REPO_FILE_BLOCKS,
-                obnamlib.REPO_FILE_DEV,
-                obnamlib.REPO_FILE_INO]
+        return [
+            obnamlib.REPO_FILE_TEST_KEY,
+            obnamlib.REPO_FILE_MODE,
+            obnamlib.REPO_FILE_MTIME_SEC,
+            obnamlib.REPO_FILE_MTIME_NSEC,
+            obnamlib.REPO_FILE_ATIME_SEC,
+            obnamlib.REPO_FILE_ATIME_NSEC,
+            obnamlib.REPO_FILE_NLINK,
+            obnamlib.REPO_FILE_SIZE,
+            obnamlib.REPO_FILE_UID,
+            obnamlib.REPO_FILE_USERNAME,
+            obnamlib.REPO_FILE_GID,
+            obnamlib.REPO_FILE_GROUPNAME,
+            obnamlib.REPO_FILE_SYMLINK_TARGET,
+            obnamlib.REPO_FILE_XATTR_BLOB,
+            obnamlib.REPO_FILE_BLOCKS,
+            obnamlib.REPO_FILE_DEV,
+            obnamlib.REPO_FILE_INO,
+            obnamlib.REPO_FILE_SHA224,
+            obnamlib.REPO_FILE_SHA256,
+            obnamlib.REPO_FILE_SHA384,
+            obnamlib.REPO_FILE_SHA512,
+        ]
 
     def interpret_generation_spec(self, client_name, genspec):
         ids = self.get_client_generation_ids(client_name)

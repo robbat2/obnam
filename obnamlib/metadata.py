@@ -34,7 +34,7 @@ metadata_verify_fields = (
 )
 metadata_fields = metadata_verify_fields + (
     'st_blocks', 'st_dev', 'st_gid', 'st_ino', 'st_atime_sec',
-    'st_atime_nsec', 'md5', 'whole_file_checksum', 'test',
+    'st_atime_nsec', 'md5', 'sha224', 'sha256', 'sha384', 'sha512', 'test',
 )
 
 

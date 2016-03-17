@@ -38,6 +38,10 @@ _short_key_names = {
     obnamlib.REPO_FILE_BLOCKS: 'B',
     obnamlib.REPO_FILE_DEV: 'D',
     obnamlib.REPO_FILE_INO: 'I',
+    obnamlib.REPO_FILE_SHA224: '224',
+    obnamlib.REPO_FILE_SHA256: '256',
+    obnamlib.REPO_FILE_SHA384: '384',
+    obnamlib.REPO_FILE_SHA512: '512',
 }
 
 # Let's make sure we have no duplicate values.

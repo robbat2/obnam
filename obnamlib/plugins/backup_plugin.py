@@ -760,10 +760,9 @@ class BackupPlugin(obnamlib.ObnamPlugin):
                                      filename)
         tracing.trace('done backing up file contents')
 
-        if checksum_key == obnamlib.REPO_FILE_MD5:
-            metadata.md5 = whole_file_summer.get_checksum()
-        else:
-            metadata.whole_file_checksum = whole_file_summer.get_checksum()
+        for key, name in obnamlib.metadata_file_key_mapping:
+            if key == checksum_key:
+                setattr(metadata, name, whole_file_summer.get_checksum())
 
     def backup_file_chunk(self, data):
         '''Back up a chunk of data by putting it into the repository.'''

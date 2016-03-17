@@ -61,7 +61,7 @@ REPO_FILE_SHA256 = _get_next_id()
 REPO_FILE_SHA384 = _get_next_id()
 REPO_FILE_SHA512 = _get_next_id()
 
-_MAX_STRING_KEY = REPO_FILE_MD5
+_MAX_STRING_KEY = REPO_FILE_SHA512
 
 REPO_GENERATION_STARTED = _get_next_id()
 REPO_GENERATION_ENDED = _get_next_id()
@@ -128,6 +128,10 @@ metadata_file_key_mapping = [
     (REPO_FILE_DEV, 'st_dev'),
     (REPO_FILE_INO, 'st_ino'),
     (REPO_FILE_MD5, 'md5'),
+    (REPO_FILE_SHA224, 'sha224'),
+    (REPO_FILE_SHA256, 'sha256'),
+    (REPO_FILE_SHA384, 'sha384'),
+    (REPO_FILE_SHA512, 'sha512'),
 ]
 
 
