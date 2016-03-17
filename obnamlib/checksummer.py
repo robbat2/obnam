@@ -30,7 +30,7 @@ _algorithm_list = [
 ]
 
 
-checksum_algorithms = [name for name, _, _ in _algorithm_list]
+checksum_algorithms = [_name for _name, _, _ in _algorithm_list]
 
 
 def get_checksum_algorithm(wanted):
