@@ -161,6 +161,7 @@ from .checksummer import (
     checksum_algorithms,
     get_checksum_algorithm,
     get_checksum_algorithm_name,
+    get_checksum_algorithm_key,
 )
 
 from .whole_file_checksummer import WholeFileCheckSummer

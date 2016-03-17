@@ -48,6 +48,13 @@ def get_checksum_algorithm_name(wanted_key):
         algorithm=obnamlib.repo_key_name(wanted_key))
 
 
+def get_checksum_algorithm_key(wanted_name):
+    for name, key, _ in _algorithm_list:
+        if name == wanted_name:
+            return key
+    raise UnknownChecksumAlgorithm(algorithm=wanted_name)
+
+
 class UnknownChecksumAlgorithm(obnamlib.ObnamError):
 
     msg = 'Unknown checksum algorithm {algorithm}.'
