@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ class RepositoryFormatGATests(obnamlib.RepositoryInterfaceTests):
             hooks=self.hooks,
             current_time=time.time,
             dir_bag_size=1,
-            dir_cache_size=0)
+            dir_cache_size=0,
+            checksum_algorithm='sha512')
         self.repo.set_fs(fs)
 
     def tearDown(self):

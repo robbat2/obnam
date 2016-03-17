@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015  Lars Wirzenius
+# Copyright (C) 2009-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,6 +72,8 @@ from .encryption import (
     SymmetricKeyCache,
     EncryptionError,
     GpgError)
+
+from .checksummer import checksum_algorithms, get_checksum_algorithm
 
 from .hooks import (
     Hook, MissingFilterError, NoFilterTagError, FilterHook, HookManager)

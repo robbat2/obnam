@@ -17,7 +17,6 @@
 
 
 import errno
-import hashlib
 import logging
 import os
 
@@ -30,11 +29,21 @@ class GAChunkIndexes(object):
 
     def __init__(self):
         self._fs = None
+        self._checksum_name = None
         self.set_dirname('chunk-indexes')
         self.clear()
 
     def set_fs(self, fs):
         self._fs = fs
+
+        # Load the data so that we can get the in-use checksum
+        # algorithm at once, before we use the default, just in case
+        # they're different.
+        self._load_data()
+
+    def set_default_checksum_algorithm(self, name):
+        if self._checksum_name is None:
+            self._checksum_name = name
 
     def set_dirname(self, dirname):
         self._dirname = dirname
@@ -74,7 +83,7 @@ class GAChunkIndexes(object):
                     'by_chunk_id': {
                     },
                     'by_checksum': {
-                        'sha512': {},
+                        self._checksum_name: {},
                     },
                     'used_by': {
                     },
@@ -83,13 +92,19 @@ class GAChunkIndexes(object):
                 self._data = obnamlib.deserialise_object(blob)
                 assert self._data is not None
 
+                keys = self._data['by_checksum'].keys()
+                assert len(keys) == 1
+                self._checksum_name = keys[0]
+
             self._data_is_loaded = True
 
     def _get_filename(self):
         return os.path.join(self.get_dirname(), 'data.dat')
 
     def prepare_chunk_for_indexes(self, chunk_content):
-        return hashlib.sha512(chunk_content).hexdigest()
+        summer = obnamlib.get_checksum_algorithm(self._checksum_name)
+        summer.update(chunk_content)
+        return summer.hexdigest()
 
     def put_chunk_into_indexes(self, chunk_id, token, client_id):
         self._load_data()
@@ -97,7 +112,7 @@ class GAChunkIndexes(object):
         by_chunk_id = self._data['by_chunk_id']
         by_chunk_id[chunk_id] = token
 
-        by_checksum = self._data['by_checksum']['sha512']
+        by_checksum = self._data['by_checksum'][self._checksum_name]
         chunk_ids = by_checksum.get(token, [])
         if chunk_id not in chunk_ids:
             chunk_ids.append(chunk_id)
@@ -112,7 +127,7 @@ class GAChunkIndexes(object):
     def find_chunk_ids_by_token(self, token):
         self._load_data()
 
-        by_checksum = self._data['by_checksum']['sha512']
+        by_checksum = self._data['by_checksum'][self._checksum_name]
         result = by_checksum.get(token, [])
 
         if not result:
@@ -153,7 +168,7 @@ class GAChunkIndexes(object):
         return token
 
     def _remove_chunk_by_checksum(self, chunk_id, token):
-        by_checksum = self._data['by_checksum']['sha512']
+        by_checksum = self._data['by_checksum'][self._checksum_name]
         chunk_ids = by_checksum.get(token, [])
         if chunk_id in chunk_ids:
             chunk_ids.remove(chunk_id)

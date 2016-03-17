@@ -1,4 +1,4 @@
-# Copyright 2015  Lars Wirzenius
+# Copyright 2015-2016  Lars Wirzenius
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,8 +27,12 @@ class RepositoryFormatGA(obnamlib.RepositoryDelegator):
         obnamlib.RepositoryDelegator.__init__(self, **kwargs)
 
         self.set_client_list_object(obnamlib.GAClientList())
-        self.set_chunk_indexes_object(obnamlib.GAChunkIndexes())
         self.set_client_factory(obnamlib.GAClient)
+
+        self.set_chunk_indexes_object(obnamlib.GAChunkIndexes())
+        assert 'checksum_algorithm' in kwargs
+        self._chunk_indexes.set_default_checksum_algorithm(
+            kwargs['checksum_algorithm'])
 
         chunk_store = obnamlib.GAChunkStore()
         if 'chunk_size' in kwargs:  # pragma: no cover

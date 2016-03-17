@@ -92,6 +92,18 @@ class App(cliapp.Application):
             'use FORMAT for new repositories; one of "6", "green-albatross"',
             metavar='FORMAT')
 
+        algos = list(obnamlib.checksum_algorithms)
+        algos.remove('sha512')
+        algos = ['sha512'] + algos
+        self.settings.choice(
+            ['checksum-algorithm'],
+            algos,
+            'use CHECKSUM for checksum algorithm '
+            '(not for repository format 6); '
+            'one of: ' +
+            ', '.join(algos),
+            metavar='CHECKSUM')
+
         # Performance related settings.
 
         perf_group = obnamlib.option_group['perf']
@@ -260,6 +272,7 @@ class App(cliapp.Application):
             'chunk_bag_size': self.settings['chunk-bag-size'],
             'dir_cache_size': self.settings['dir-cache-size'],
             'dir_bag_size': self.settings['dir-bag-size'],
+            'checksum_algorithm': self.settings['checksum-algorithm'],
         }
 
         if create:
