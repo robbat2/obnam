@@ -63,6 +63,13 @@ class TestGetChecksummer(unittest.TestCase):
         for name in obnamlib.checksum_algorithms:
             summer = obnamlib.get_checksum_algorithm(name)
             summer.update('hello, world')
-            checksum = summer.hexdigest()
-            self.assertEqual(type(checksum), str)
-            self.assertNotEqual(checksum, '')
+
+            digest = summer.hexdigest()
+            self.assertEqual(type(digest), str)
+            self.assertNotEqual(digest, '')
+
+            hexdigest = summer.hexdigest()
+            self.assertEqual(type(hexdigest), str)
+            self.assertNotEqual(hexdigest, '')
+            for c in hexdigest:
+                self.assertTrue(c in '0123456789abcdef')

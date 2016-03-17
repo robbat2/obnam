@@ -35,6 +35,7 @@ class WholeFileCheckSummer(object):
 
     def __init__(self, file_key):
         self._all_bytes = file_key == obnamlib.REPO_FILE_MD5
+        self._use_hex = file_key != obnamlib.REPO_FILE_MD5
         self._summer = self._create_checksum_algorithm(file_key)
 
     def _create_checksum_algorithm(self, file_key):
@@ -52,7 +53,10 @@ class WholeFileCheckSummer(object):
 
     def get_checksum(self):
         '''Get the current whole-file checksum.'''
-        return self._summer.hexdigest()
+        if self._use_hex:
+            return self._summer.hexdigest()
+        else:
+            return self._summer.digest()
 
 
 class _NullChecksum(object):

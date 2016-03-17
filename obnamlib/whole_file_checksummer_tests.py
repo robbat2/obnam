@@ -36,7 +36,7 @@ class WholeFileCheckSummerTests(unittest.TestCase):
         chunk_id = None
         summer.append_chunk(chunk, chunk_id)
         self.assertEqual(
-            summer.get_checksum(),
+            summer.get_checksum().encode('hex'),
             '5d41402abc4b2a76b9719d911017c592')
 
     def test_computes_checksum_for_sha512(self):
