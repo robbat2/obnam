@@ -36,6 +36,7 @@ class WholeFileCheckSummer(object):
     '''
 
     def __init__(self, file_key):
+        self._all_bytes = file_key == obnamlib.REPO_FILE_MD5
         self._summer = self._create_checksum_algorithm(file_key)
 
     def _create_checksum_algorithm(self, file_key):
@@ -44,8 +45,12 @@ class WholeFileCheckSummer(object):
         name = obnamlib.get_checksum_algorithm_name(file_key)
         return obnamlib.get_checksum_algorithm(name)
 
-    def append_chunk(self, chunk_data, token):
-        self._summer.update(chunk_data)
+    def append_chunk(self, chunk_data, chunk_id):
+        if self._all_bytes:
+            self._summer.update(chunk_data)
+        else:
+            thing = '{},{};'.format(len(chunk_data), chunk_id)
+            self._summer.update(thing)
 
     def get_checksum(self):
         '''Get the current whole-file checksum.'''

@@ -16,6 +16,7 @@
 # =*= License: GPL-3+ =*=
 
 
+import hashlib
 import unittest
 
 import obnamlib
@@ -36,6 +37,7 @@ class WholeFileCheckSummerTests(unittest.TestCase):
         summer = obnamlib.WholeFileCheckSummer(obnamlib.REPO_FILE_MD5)
         chunk = 'hello'
         token = repo.prepare_chunk_for_indexes(chunk)
+        chunk_id = None
         summer.append_chunk(chunk, token)
         self.assertEqual(
             summer.get_checksum(),
@@ -46,11 +48,12 @@ class WholeFileCheckSummerTests(unittest.TestCase):
         summer = obnamlib.WholeFileCheckSummer(obnamlib.REPO_FILE_SHA512)
         chunk = 'hello'
         token = repo.prepare_chunk_for_indexes(chunk)
-        summer.append_chunk(chunk, token)
-        self.assertEqual(
-            summer.get_checksum(),
-            '9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca7'
-            '2323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043')
+        chunk_id = '123'
+        summer.append_chunk(chunk, chunk_id)
+
+        expected = hashlib.sha512('{},{};'.format(len(chunk), chunk_id))
+
+        self.assertEqual(summer.get_checksum(), expected.hexdigest())
 
 
 class FakeRepository(object):
