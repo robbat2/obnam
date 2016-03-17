@@ -16,8 +16,6 @@
 # =*= License: GPL-3+ =*=
 
 
-import hashlib
-
 import obnamlib
 
 
