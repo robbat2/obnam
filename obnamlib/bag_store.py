@@ -23,6 +23,11 @@ import random
 import obnamlib
 
 
+# Start with a new random id after this many sequential ones.
+# This avoids putting all the ids in one directory.
+MAX_IDS_UNTIL_RESET = 512
+
+
 class BagStore(object):
 
     def __init__(self):
@@ -94,23 +99,34 @@ class IdInventor(object):
 
     def set_fs(self, fs):
         self._fs = fs
+        self._reset_ids()
+
+    def _reset_ids(self):
         self._prev_id = None
+        self._ids_since_reset = 0
+        self._max_ids_until_reset = MAX_IDS_UNTIL_RESET
 
     def set_filename_maker(self, maker):
         self._filename_maker = maker
 
     def reserve_id(self):
         while True:
+            if self._time_to_reset_ids():  # pragma: no cover
+                self._reset_ids()
             self._next_id()
             if self._reserve_succeeds():
                 return self._prev_id
             self._prev_id = None  # pragma: no cover
+
+    def _time_to_reset_ids(self):
+        return self._ids_since_reset >= self._max_ids_until_reset
 
     def _next_id(self):
         if self._prev_id is None:
             self._prev_id = random.randint(0, obnamlib.MAX_ID)
         else:
             self._prev_id += 1  # pragma: no cover
+        self._ids_since_reset += 1
 
     def _reserve_succeeds(self):
         filename = self._filename_maker(self._prev_id)
