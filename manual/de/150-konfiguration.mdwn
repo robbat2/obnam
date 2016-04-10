@@ -99,7 +99,7 @@ beiden wichtigsten Ausnahmen sind:
   Werteliste ersetzt, anstatt hinzugefügt.
 
 Eine genauere Erklärung der Syntax finden Sie in der **cliapp**(5)
-manpage Ihres Systems oder im WWW [cliapp man page].
+manpage Ihres Systems oder im WWW [cliapp man page (englisch)].
 
 [cliapp man page (englisch)]: http://code.liw.fi/cliapp/cliapp.5.txt
 
@@ -126,7 +126,8 @@ Alle Konfigurationseinstellungen herausfinden
 Diese Anleitung beinhaltet und erklärt noch nicht alle Einstellungen.
 Obnam bietet aber eine integrierte Hilfe (`obnam - help`) und eine
 manpage, die automatisch aus der integrierten Hilfe erzeugt wird (`man
-obnam` oder siehe [obnam man page]). Eines Tages wird dieses Kapitel
+obnam` oder siehe [obnam man page (englisch)]
+oder [deutsch][obnam man page (deutsch)]). Eines Tages wird dieses Kapitel
 einen automatisch generierten Abschnitt enthalten der jede Einstellung
 erklärt. Bis dahin dürfen Sie gern mit dem Finger auf Obnams Autor
 zeigen und über seine Faulheit kichern.
