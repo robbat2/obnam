@@ -98,7 +98,7 @@ For a more detailed explanation of Obnam configuration file syntax,
 see the **cliapp**(5) manual page on your system, or [cliapp man page]
 on the WWW.
 
-[cliapp man page]: http://liw.fi/cliapp/cliapp.5.txt
+[cliapp man page]: http://code.liw.fi/cliapp/cliapp.5.txt
 
 Checking what my configuration is
 ---------------------------------
@@ -128,4 +128,4 @@ include an automatically generated section that explains each setting.
 Until then, you're free to point fingers at Obnam's author and giggle
 at his laziness.
 
-[obnam man page]: http://obnam.org/obnam.1.txt
+[obnam man page]: http://code.liw.fi/obnam/obnam.1.txt
