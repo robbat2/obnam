@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import sys
+
+counts = {}
+
+for line in sys.stdin:
+    words = line.split()
+#    print words
+    if len(words) == 7 and words[4] in ('INIT', 'DEL'):
+        obj_type = words[5]
+        obj_id = words[6]
+        if words[4] == 'INIT':
+            delta = 1
+        else:
+            delta = -1
+        counts[obj_type] = counts.get(obj_type, 0) + delta
+        print obj_type, counts[obj_type]
+    elif len(words) == 6 and words[3] == 'VmRSS:':
+        vmrss = words[4]
+        print "VmRSS", vmrss
