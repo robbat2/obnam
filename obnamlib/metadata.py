@@ -22,6 +22,7 @@ import pwd
 import stat
 import struct
 import sys
+
 import tracing
 
 import obnamlib
@@ -81,6 +82,7 @@ class Metadata(object):
     '''
 
     def __init__(self, **kwargs):
+        tracing.trace('INIT Metadata %s', id(self))
         self.md5 = None  # Silence pylint.
         self.st_size = None  # Silence pylint.
         self.st_mode = None  # Silence pylint.
@@ -90,6 +92,9 @@ class Metadata(object):
             setattr(self, field, None)
         for field, value in kwargs.iteritems():
             setattr(self, field, value)
+
+    def __del__(self):
+        tracing.trace('DEL Metadata %s', id(self))
 
     def isdir(self):
         return self.st_mode is not None and stat.S_ISDIR(self.st_mode)
