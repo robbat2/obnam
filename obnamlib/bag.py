@@ -16,15 +16,21 @@
 # =*= License: GPL-3+ =*=
 
 
+import tracing
+
 import obnamlib
 
 
 class Bag(object):
 
     def __init__(self):
+        tracing.trace('INIT Bag %s', id(self))
         self._bag_id = None
         self._blobs = []
         self._blobs_bytes = 0
+
+    def __del__(self):
+        tracing.trace('DEL Bag %s', id(self))
 
     def get_id(self):
         return self._bag_id

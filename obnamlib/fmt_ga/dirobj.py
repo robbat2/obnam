@@ -16,6 +16,8 @@
 # =*= License: GPL-3+ =*=
 
 
+import tracing
+
 import obnamlib
 
 
@@ -53,11 +55,15 @@ _key_from_short = dict((v, k) for k, v in _short_key_names.items())
 class GADirectory(object):
 
     def __init__(self):
+        tracing.trace('INIT GADirectory %s', id(self))
         self._dict = {
             'metadata': {},
             'subdirs': {},
         }
         self._mutable = True
+
+    def __del__(self):
+        tracing.trace('DEL GADirectory %s', id(self))
 
     def is_mutable(self):
         return self._mutable

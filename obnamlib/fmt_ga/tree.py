@@ -18,6 +18,8 @@
 
 import os
 
+import tracing
+
 import obnamlib
 
 
@@ -36,9 +38,13 @@ class GATree(object):
     '''
 
     def __init__(self):
+        tracing.trace('INIT GATree %s', id(self))
         self._blob_store = None
         self._root_dir_id = None
         self._cache = DirectoryObjectCache()
+
+    def __del__(self):
+        tracing.trace('DEL GATree %s', id(self))
 
     def set_blob_store(self, blob_store):
         self._blob_store = blob_store
@@ -155,7 +161,11 @@ class GATree(object):
 class DirectoryObjectCache(object):
 
     def __init__(self):
+        tracing.trace('INIT DirectoryObjectCache %s', id(self))
         self.clear()
+
+    def __del__(self):
+        tracing.trace('DEL DirectoryObjectCache %s', id(self))
 
     def clear(self):
         self._objs = {}

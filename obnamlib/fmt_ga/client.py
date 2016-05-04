@@ -20,6 +20,8 @@ import copy
 import os
 import stat
 
+import tracing
+
 import obnamlib
 
 
@@ -28,12 +30,16 @@ class GAClient(object):
     _well_known_blob = 'root'
 
     def __init__(self, client_name):
+        tracing.trace('INIT GAClient %s', id(self))
         self._fs = None
         self._dirname = None
         self._client_name = client_name
         self._current_time = None
         self._default_checksum_algorithm = None
         self.clear()
+
+    def __del__(self):
+        tracing.trace('DEL GAClient %s', id(self))
 
     def clear(self):
         self._blob_store = None
@@ -394,7 +400,11 @@ class GAClient(object):
 class GAKeys(object):
 
     def __init__(self):
+        tracing.trace('INIT GAKeys %s', id(self))
         self._dict = {}
+
+    def __del__(self):
+        tracing.trace('DEL GAKeys %s', id(self))
 
     def as_dict(self):
         return self._dict
@@ -412,8 +422,12 @@ class GAKeys(object):
 class GAGenerationList(object):
 
     def __init__(self):
+        tracing.trace('INIT GAGenerationList %s', id(self))
         self._generations = []
         self._by_number = {}
+
+    def __del__(self):
+        tracing.trace('DEL GAGenerationList %s', id(self))
 
     def __len__(self):
         return len(self._generations)
@@ -440,10 +454,14 @@ class GAGenerationList(object):
 class GAGeneration(object):
 
     def __init__(self):
+        tracing.trace('INIT GAGeneration %s', id(self))
         self._id = None
         self._keys = GAKeys()
         self._file_metadata = GAFileMetadata()
         self._root_object_id = None
+
+    def __del__(self):
+        tracing.trace('DEL GAGeneration %s', id(self))
 
     def as_dict(self):
         return {
@@ -483,9 +501,13 @@ class GAGeneration(object):
 class GAFileMetadata(object):
 
     def __init__(self):
+        tracing.trace('INIT GAFileMetadata %s', id(self))
         self._blob_store = None
         self._tree = None
         self._added_files = AddedFiles()
+
+    def __del__(self):
+        tracing.trace('DEL GAFileMetadata %s', id(self))
 
     def set_blob_store(self, blob_store):
         assert self._blob_store is None
@@ -745,7 +767,11 @@ class GAFileMetadata(object):
 class AddedFiles(object):
 
     def __init__(self):
+        tracing.trace('INIT AddedFile %s', id(self))
         self.clear()
+
+    def __del__(self):
+        tracing.trace('DEL AddedFile %s', id(self))
 
     def clear(self):
         self._files = {}
