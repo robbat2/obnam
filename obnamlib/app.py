@@ -287,7 +287,7 @@ class App(cliapp.Application):
             '6': obnamlib.RepositoryFormat6,
             'green-albatross': obnamlib.RepositoryFormatGA,
             }
-        return classes[self.settings['repository-format']]
+        return classes[str(self.settings['repository-format'])]
 
     def time(self):
         '''Return current time in seconds since epoch.
