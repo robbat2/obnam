@@ -22,23 +22,25 @@ import json
 class MeliaeReader(object):
 
     def __init__(self):
-        self._objs = []
+        self._objs = {}
 
     def __iter__(self):
-        return iter(self._objs)
+        return iter(self._objs.values())
 
     def __contains__(self, ref):
-        return any(o['address'] == ref for o in self)
+        return ref in self._objs
 
     def __len__(self):
         return len(self._objs)
 
     def read(self, filename):
         with open(filename) as f:
-            self._objs.extend(json.loads(line) for line in f)
+            for line in f:
+                obj = json.loads(line)
+                self._objs[obj['address']] = obj
 
     def get_total_size(self):
-        return self.get_size(self._objs)
+        return self.get_size(self._objs.values())
 
     def get_size(self, objs):
         return sum(o['size'] for o in objs)
@@ -63,9 +65,8 @@ class MeliaeReader(object):
         return closure
 
     def get_object(self, ref):
-        for obj in self:
-            if obj['address'] == ref:
-                return obj
+        if ref in self:
+            return self._objs[ref]
         raise Exception('No object with address {}'.format(ref))
 
     def get_closure_of_type(self, typename):

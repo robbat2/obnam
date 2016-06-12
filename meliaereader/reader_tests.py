@@ -54,7 +54,7 @@ class MeliaeReaderTests(unittest.TestCase):
         self.assertEqual(len(mr), 0)
 
     def test_reads_file_with_one_object(self):
-        filename = self.make_file(self.make_object())
+        filename = self.make_file(self.make_object(address=1))
         mr = meliaereader.MeliaeReader()
         mr.read(filename)
         self.assertEqual(len(mr), 1)
@@ -85,22 +85,22 @@ class MeliaeReaderTests(unittest.TestCase):
         self.assertEqual(mr.get_size([obj]), 42)
 
     def test_readings_adds_to_existing_objs(self):
-        filename_1 = self.make_file(self.make_object())
-        filename_2 = self.make_file(self.make_object())
+        filename_1 = self.make_file(self.make_object(address=1))
+        filename_2 = self.make_file(self.make_object(address=2))
         mr = meliaereader.MeliaeReader()
         mr.read(filename_1)
         mr.read(filename_2)
         self.assertEqual(len(mr), 2)
 
     def test_reports_object_types(self):
-        filename = self.make_file(self.make_object(type='foo'))
+        filename = self.make_file(self.make_object(type='foo', address=1))
         mr = meliaereader.MeliaeReader()
         mr.read(filename)
         self.assertEqual(mr.get_types(), set(['foo']))
 
     def test_reports_objs_of_type(self):
-        obj_1 = self.make_object(type='foo')
-        obj_2 = self.make_object(type='bar')
+        obj_1 = self.make_object(type='foo', address=1)
+        obj_2 = self.make_object(type='bar', address=2)
         filename = self.make_file(obj_1, obj_2)
         mr = meliaereader.MeliaeReader()
         mr.read(filename)
