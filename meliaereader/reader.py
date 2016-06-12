@@ -92,10 +92,13 @@ class MeliaeReader(object):
         for child in children:
             delta = set(child['refs']).difference(closure)
             if delta:
+                add = False
                 for r in delta:
                     if r in self:
                         closure.add(r)
-                grown.add(child['address'])
+                        add = True
+                if add:
+                    grown.add(child['address'])
         return grown
 
     def _simple_get_closure(self, ref):  # pragma: no cover
