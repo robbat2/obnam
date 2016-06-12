@@ -76,15 +76,20 @@ class MeliaeReader(object):
         # Find new objects that can be reached from current closures.
         # Repeat until no more.
         added = True
+        growing_refs = list(all_refs)
         while added:
+            sys.stderr.write('.')
+            sys.stderr.flush()
             added = False
-            for ref in all_refs:
-                added = self.add_to_closure(ref) or added
+            growing2 = set()
+            for ref in growing_refs:
+                growing2.update(self.add_to_closure(ref))
+            growing_refs = growing2
 
         assert set(self._objs.keys()) == set(self._closures.keys())
 
     def add_to_closure(self, ref):
-        added = False
+        grown = set()
         closure = self._closures[ref]
         children = [self.get_object(r) for r in closure]
         for child in children:
@@ -93,8 +98,8 @@ class MeliaeReader(object):
                 for r in delta:
                     if r in self:
                         closure.add(r)
-                added = True
-        return added
+                grown.add(child['address'])
+        return grown
 
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
