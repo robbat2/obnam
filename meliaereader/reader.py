@@ -76,7 +76,7 @@ class MeliaeReader(object):
         # Find new objects that can be reached from current closures.
         # Repeat until no more.
         added = True
-        while added and all_refs:
+        while added:
             added = False
             for ref in all_refs:
                 added = self.add_to_closure(ref) or added
