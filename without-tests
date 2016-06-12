@@ -1,5 +1,7 @@
 setup.py
 
+meliaereader/__init__.py
+
 obnamlib/app.py
 obnamlib/backup_progress.py
 obnamlib/defaults.py
