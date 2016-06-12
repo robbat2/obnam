@@ -101,16 +101,30 @@ class MeliaeReader(object):
 
     def compute_closures(self):
         all_refs = self._objs.keys()
+        biggest = []
+        max_biggest = 100
         for i, ref in enumerate(all_refs):
-            sys.stderr.write('{} closures left\n'.format(
-                len(self) - len(self._closures)))
+            if (i % 100) == 0:
+                remaining = len(self) - len(self._closures)
+                sys.stderr.write(
+                    '{} of {} closures done, {} remaining\n'.format(
+                        i, len(self), remaining))
+                
             closure = self._simple_get_closure(ref)
-            for j in range(0, i):
-                j_ref = all_refs[j]
-                if self._closures[j_ref] == closure:
-                    closure = self._closures[j_ref]
-                    break
+            closure = self._dedup_biggest(biggest, max_biggest, closure)
             self._closures[ref] = closure
+
+    def _dedup_biggest(self, biggest, max_biggest, closure):
+        if biggest and biggest[0][0] > len(closure):
+            return closure
+        for n, big in biggest:
+            if n == len(closure) and big == closure:
+                return big
+        biggest.append((len(closure), closure))
+        biggest.sort()
+        if len(biggest) > max_biggest:
+            del biggest[0]  # pragma: no cover
+        return closure
 
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
