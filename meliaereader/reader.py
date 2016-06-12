@@ -66,10 +66,33 @@ class MeliaeReader(object):
 
     def compute_closures(self):
         sys.stderr.write('computing closures for {} objects'.format(len(self)))
-        for ref in self._objs:
-            sys.stderr.write('{} closures to go\n'.format(len(self) - len(self._closures)))
-            self._closures[ref] = self._simple_get_closure(ref)
+
+        all_refs = self._objs.keys()
+
+        # Set all closures to be just the object itself.
+        for ref in all_refs:
+            self._closures[ref] = set([ref])
+
+        # Find new objects that can be reached from current closures.
+        # Repeat until no more.
+        added = True
+        while added and all_refs:
+            added = False
+            for ref in all_refs:
+                added = self.add_to_closure(ref) or added
+
         assert set(self._objs.keys()) == set(self._closures.keys())
+
+    def add_to_closure(self, ref):
+        added = False
+        closure = self._closures[ref]
+        children = [self.get_object(r) for r in closure]
+        for child in children:
+            delta = set(child['refs']).difference(closure)
+            if delta:
+                closure.update(delta)
+                added = True
+        return added
 
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
