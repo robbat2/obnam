@@ -126,6 +126,15 @@ class MeliaeReaderTests(unittest.TestCase):
         self.assertEqual(mr.get_closure(obj_1), [obj_1, obj_2])
         self.assertEqual(mr.get_closure(obj_2), [obj_2])
 
+    def test_reports_closure_for_object_cycle(self):
+        obj_1 = self.make_object(type='foo', address=1, refs=[2])
+        obj_2 = self.make_object(type='bar', address=2, refs=[1])
+        filename = self.make_file(obj_1, obj_2)
+        mr = meliaereader.MeliaeReader()
+        mr.read(filename)
+        self.assertEqual(mr.get_closure(obj_1), [obj_1, obj_2])
+        self.assertEqual(mr.get_closure(obj_2), [obj_1, obj_2])
+
     def test_reports_closure_for_type(self):
         obj_1 = self.make_object(type='foo', address=1, refs=[2])
         obj_2 = self.make_object(type='bar', address=2, refs=[])
