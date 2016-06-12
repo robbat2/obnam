@@ -100,10 +100,17 @@ class MeliaeReader(object):
         return grown
 
     def compute_closures(self):
-        for ref in self._objs.keys():
+        all_refs = self._objs.keys()
+        for i, ref in enumerate(all_refs):
             sys.stderr.write('{} closures left\n'.format(
                 len(self) - len(self._closures)))
-            self._closures[ref] = self._simple_get_closure(ref)
+            closure = self._simple_get_closure(ref)
+            for j in range(0, i):
+                j_ref = all_refs[j]
+                if self._closures[j_ref] == closure:
+                    closure = self._closures[j_ref]
+                    break
+            self._closures[ref] = closure
 
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
