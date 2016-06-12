@@ -65,8 +65,6 @@ class MeliaeReader(object):
         return [o for o in self if o['type'] == typename]
 
     def compute_closures(self):
-        sys.stderr.write('computing closures for {} objects'.format(len(self)))
-
         all_refs = self._objs.keys()
 
         # Set all closures to be just the object itself.
@@ -78,8 +76,6 @@ class MeliaeReader(object):
         added = True
         growing_refs = list(all_refs)
         while added:
-            sys.stderr.write('.')
-            sys.stderr.flush()
             added = False
             growing2 = set()
             for ref in growing_refs:
