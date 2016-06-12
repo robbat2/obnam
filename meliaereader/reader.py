@@ -90,7 +90,9 @@ class MeliaeReader(object):
         for child in children:
             delta = set(child['refs']).difference(closure)
             if delta:
-                closure.update(delta)
+                for r in delta:
+                    if r in self:
+                        closure.add(r)
                 added = True
         return added
 
