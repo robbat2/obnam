@@ -71,17 +71,17 @@ class MeliaeReader(object):
 
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
-        todo = [ref]
+        todo = set([ref])
         done = set()
         while todo:
-            ref = todo.pop(0)
+            ref = todo.pop()
             done.add(ref)
             closure.add(ref)
 
             obj = self.get_object(ref)
             for child_ref in obj['refs']:
                 if child_ref not in done and child_ref in self:
-                    todo.append(child_ref)
+                    todo.add(child_ref)
 
         return closure
 
