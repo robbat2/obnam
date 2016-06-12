@@ -5,6 +5,7 @@
 
 
 import json
+import os
 import sys
 
 import jinja2
@@ -30,7 +31,8 @@ def make_report(filename, mr):
 
 
 def read_template():
-    filename = 'meliae-report.j2'
+    dirname = os.path.dirname(meliaereader.__file__)
+    filename = os.path.join(dirname, 'meliae-report.j2')
     with open(filename) as f:
         return f.read()
 
