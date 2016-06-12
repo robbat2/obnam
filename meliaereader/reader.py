@@ -65,33 +65,29 @@ class MeliaeReader(object):
         return [o for o in self if o['type'] == typename]
 
     def compute_closures(self):
-        while True:
-            refs = self.find_trivial_closures()
-            if not refs:
-                break
-            for ref in refs:
-                assert ref not in self._closures
-                self._closures[ref] = self.get_trivial_closure(ref)
-
-    def find_trivial_closures(self):
-        refs = []
         for ref in self._objs:
-            if ref not in self._closures:
-                obj = self.get_object(ref)
-                if all((child_ref in self._closures) for child_ref in obj['refs']):
-                    refs.append(ref)
-        return refs
+            self._closures[ref] = self._simple_get_closure(ref)
+        assert set(self._objs.keys()) == set(self._closures.keys())
 
-    def get_trivial_closure(self, ref):
-        obj = self.get_object(ref)
-        refs = set([ref])
-        for child_ref in obj['refs']:
-            refs = refs.union(self._closures.get(child_ref, set()))
-        return refs
+    def _simple_get_closure(self, ref):  # pragma: no cover
+        closure = set()
+        todo = [ref]
+        done = set()
+        while todo:
+            ref = todo.pop(0)
+            done.add(ref)
+            closure.add(ref)
+
+            obj = self.get_object(ref)
+            for child_ref in obj['refs']:
+                if child_ref not in done and child_ref in self:
+                    todo.append(child_ref)
+
+        return closure
 
     def get_closure(self, obj, indent=0):
         ref = obj['address']
-        assert ref in self._closures
+        assert ref in self._closures, 'ref {} not in _closures'.format(ref)
         return [self.get_object(r) for r in self._closures[ref]]
 
     def get_object(self, ref):
