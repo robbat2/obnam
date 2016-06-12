@@ -114,9 +114,7 @@ class MeliaeReader(object):
             closure.add(ref)
             obj = self.get_object(ref)
             for child_ref in obj['refs']:
-                if (child_ref not in closure and
-                    child_ref not in todo and
-                    child_ref in self):
+                if child_ref not in closure and child_ref in self:
                     todo.add(child_ref)
 
         return closure
