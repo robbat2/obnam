@@ -65,7 +65,9 @@ class MeliaeReader(object):
         return [o for o in self if o['type'] == typename]
 
     def compute_closures(self):
+        sys.stderr.write('computing closures for {} objects'.format(len(self)))
         for ref in self._objs:
+            sys.stderr.write('{} closures to go\n'.format(len(self) - len(self._closures)))
             self._closures[ref] = self._simple_get_closure(ref)
         assert set(self._objs.keys()) == set(self._closures.keys())
 
@@ -76,12 +78,14 @@ class MeliaeReader(object):
         while todo:
             ref = todo.pop()
             done.add(ref)
-            closure.add(ref)
-
-            obj = self.get_object(ref)
-            for child_ref in obj['refs']:
-                if child_ref not in done and child_ref in self:
-                    todo.add(child_ref)
+            if ref in self._closures:
+                closure = closure.union(self._closures[ref])
+            else:
+                closure.add(ref)
+                obj = self.get_object(ref)
+                for child_ref in obj['refs']:
+                    if child_ref not in done and child_ref in self:
+                        todo.add(child_ref)
 
         return closure
 
