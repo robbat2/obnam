@@ -16,6 +16,8 @@
 # =*= License: GPL-3+ =*=
 
 
+import sys
+
 import json
 
 
@@ -70,6 +72,7 @@ class MeliaeReader(object):
         raise Exception('No object with address {}'.format(ref))
 
     def get_closure_of_type(self, typename):
+        sys.stderr.write('get_closure_of_type({})\n'.format(typename))
         type_closure = {}
         for obj in self.get_objs_of_type(typename):
             for o in self.get_closure(obj):
