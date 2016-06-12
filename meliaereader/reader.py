@@ -108,14 +108,17 @@ class MeliaeReader(object):
     def _simple_get_closure(self, ref):  # pragma: no cover
         closure = set()
         todo = set([ref])
+        all_refs = set(self._objs.keys())
         while todo:
             ref = todo.pop()
             assert ref not in closure
             closure.add(ref)
             obj = self.get_object(ref)
-            for child_ref in obj['refs']:
-                if child_ref not in closure and child_ref in self:
-                    todo.add(child_ref)
+
+            child_refs = set(obj['refs'])
+            child_refs = child_refs.intersection(all_refs)
+            child_refs = child_refs.difference(closure)
+            todo.update(child_refs)
 
         return closure
 
