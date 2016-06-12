@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Summary {{ filename }}</title>
+    <style>
+      table {
+      font-family: mono;
+      border: 0;
+      text-align: left;
+      }
+      th {
+      font-weight: bold;
+      border-bottom: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Summary of {{ filename }}</h1>
+
+    <p>Number of objects: {{ mr|length }}</p>
+    <p>Total size: {{ mr.get_total_size() }}</p>
+
+    <table>
+      <tr>
+        <th>type</th>
+        <th>objs</th>
+        <th>total size</th>
+        <th>closure size</th>
+      </tr>
+
+      {% for typename in mr.get_obnam_types()|sort %}
+      <tr>
+        <td>{{ typename }}</td>
+        <td>{{ mr.get_objs_of_type(typename)|length }}</td>
+        <td>{{ mr.get_size(mr.get_objs_of_type(typename)) }}</td>
+        <td>{{ mr.get_size(mr.get_closure_of_type(typename)) }}</td>
+      </tr>
+      {% endfor %}
+
+  </body>
+</html>

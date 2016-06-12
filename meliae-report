@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+#
+# Read a data file produced by python-meliae (one JSON object per
+# line), and produce a report  of memory use by Python type.
+
+
+import json
+import sys
+
+import jinja2
+
+import meliaereader
+
+
+def log(msg):
+    sys.stderr.write(msg + '\n')
+    sys.stderr.flush()
+
+
+def make_report(filename, mr):
+    vars = {
+        'mr': mr,
+        'filename': filename,
+    }
+    t = jinja2.Template(read_template())
+    text = t.render(**vars)
+    if not text.endswith('\n'):
+        text += '\n'
+    return text
+
+
+def read_template():
+    filename = 'meliae-report.j2'
+    with open(filename) as f:
+        return f.read()
+
+
+def main():
+    for filename in sys.argv[1:]:
+        log('processing {}'.format(filename))
+        mr = meliaereader.MeliaeReader()
+        mr.read(filename)
+        log('read {} objs'.format(len(mr)))
+        mr.compute_closures()
+        sys.stdout.write(make_report(filename, mr))
+
+
+main()
