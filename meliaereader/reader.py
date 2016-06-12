@@ -75,8 +75,9 @@ class MeliaeReader(object):
         # Repeat until no more.
         added = True
         growing_refs = list(all_refs)
-        while added:
-            added = False
+        while growing_refs:
+            sys.stderr.write(
+                'computing closures for {} objs\n'.format(len(growing_refs)))
             growing2 = set()
             for ref in growing_refs:
                 growing2.update(self.add_to_closure(ref))
