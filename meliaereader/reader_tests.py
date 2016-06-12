@@ -42,6 +42,14 @@ class MeliaeReaderTests(unittest.TestCase):
         return filename
 
     def make_object(self, **kwargs):
+        defaults = {
+            'size': 0,
+            'refs': [],
+            'type': 'unknown',
+        }
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
         return kwargs
 
     def test_has_no_objects_initially(self):
