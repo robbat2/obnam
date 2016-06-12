@@ -80,20 +80,21 @@ class MeliaeReader(object):
                 'computing closures for {} objs\n'.format(len(growing_refs)))
             growing2 = set()
             for ref in growing_refs:
-                growing2.update(self.add_to_closure(ref, all_refs))
+                growing2.update(self.add_to_closure(ref))
             growing_refs = growing2
 
         assert set(self._objs.keys()) == set(self._closures.keys())
 
-    def add_to_closure(self, ref, all_refs):
+    def add_to_closure(self, ref):
         grown = set()
         closure = self._closures[ref]
         children = [self.get_object(r) for r in closure]
         for child in children:
             delta = set(child['refs']).difference(closure)
-            delta = delta.intersection(all_refs)
             if delta:
-                closure.update(delta)
+                for r in delta:
+                    if r in self:
+                        closure.add(r)
                 grown.add(child['address'])
         return grown
 
