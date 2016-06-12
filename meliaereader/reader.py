@@ -20,11 +20,14 @@ import sys
 
 import json
 
+import obnamlib
+
 
 class MeliaeReader(object):
 
     def __init__(self):
         self._objs = {}
+        self._closures = {}
 
     def __iter__(self):
         return iter(self._objs.values())
@@ -50,21 +53,24 @@ class MeliaeReader(object):
     def get_types(self):
         return set(o['type'] for o in self)
 
+    def get_obnam_types(self):  # pragma: no cover
+        return set(o['type'] for o in self if hasattr(obnamlib, o['type']))
+
     def get_objs_of_type(self, typename):
         return [o for o in self if o['type'] == typename]
 
     def get_closure(self, obj):
-        closure = []
-        todo = [obj]
-        done = set()
-        while todo:
-            o = todo.pop(0)
-            done.add(o['address'])
-            closure.append(o)
-            for ref in o['refs']:
-                if ref not in done and ref in self:
-                    todo.append(self.get_object(ref))
-        return closure
+        sys.stderr.write('get_closure({})\n'.format(obj['address']))
+        ref = obj['address']
+        if ref not in self._closures:
+            refs = self._closures[ref] = set()
+            refs.add(ref)
+            for child_ref in obj['refs']:
+                if child_ref in self:
+                    child = self.get_object(child_ref)
+                    for child_obj in self.get_closure(child):
+                        refs.add(child_obj['address'])
+        return [self.get_object(r) for r in self._closures[ref]]
 
     def get_object(self, ref):
         if ref in self:
