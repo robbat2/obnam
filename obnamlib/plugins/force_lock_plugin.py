@@ -45,19 +45,40 @@ class RepoAccessWrapper(object):
 class ForceLockPlugin(obnamlib.ObnamPlugin):
 
     def enable(self):
-        self.app.add_subcommand('force-lock', self.force_lock)
+        # legacy:
+        self.app.add_subcommand('force-lock', self.force_lock, hidden=True)
         self.app.add_subcommand('_lock', self.lock, hidden=True)
+
+        # new:
+        self.app.add_subcommand('lock-force-release-all', self.force_release_all_locks)
+        self.app.add_subcommand('lock-force-release-client', self.force_release_client_lock)
 
     def force_lock(self, args):
         '''Force a locked repository to be open.'''
+        self.app.ts.notify("force-lock is deprecated.  " +
+                           "Use force-release-all-locks or a " +
+                           "more specific variant)")
+        self.force_release_all_locks(args)
 
-        logging.info('Forcing lock')
+    def force_release_all_locks(self, args):
+        '''Forcibly release all locks.'''
+        logging.info('Forcibly releasing all locks')
         with RepoAccessWrapper(self) as repo:
             repo.force_client_list_lock()
             for client_name in repo.get_client_names():
                 repo.force_client_lock(client_name)
             repo.force_chunk_indexes_lock()
         return 0
+
+    def force_release_client_lock(self, args):
+        '''Forcibily release a specific client lock.'''
+
+        client_name = self.app.settings['client-name']
+        logging.info('Forcibly releasing client lock for %s', client_name)
+        with RepoAccessWrapper(self) as repo:
+            repo.force_client_lock(client_name)
+        return 0
+
 
     def lock(self, args):
         '''Add locks to the repository.
