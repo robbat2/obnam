@@ -52,6 +52,10 @@ class ForceLockPlugin(obnamlib.ObnamPlugin):
         # new:
         self.app.add_subcommand('lock-force-release-all', self.force_release_all_locks)
         self.app.add_subcommand('lock-force-release-client', self.force_release_client_lock)
+        self.app.add_subcommand('lock-take-all', self.take_all_locks)
+        self.app.add_subcommand('lock-take-client', self.take_client_lock)
+        self.app.add_subcommand('lock-release-all', self.release_all_locks)
+        self.app.add_subcommand('lock-release-client', self.release_client_lock)
 
     def force_lock(self, args):
         '''Force a locked repository to be open.'''
@@ -79,6 +83,37 @@ class ForceLockPlugin(obnamlib.ObnamPlugin):
             repo.force_client_lock(client_name)
         return 0
 
+    def take_all_locks(self, args):
+        '''Take global locks and client-specific lock'''
+        logging.info('Taking global locks and client-specific lock')
+        with RepoAccessWrapper(self) as repo:
+            repo.lock_everything()
+        return 0
+
+    def take_client_lock(self, args):
+        '''Take a specific client lock.'''
+
+        client_name = self.app.settings['client-name']
+        logging.info('Taking client lock for %s', client_name)
+        with RepoAccessWrapper(self) as repo:
+            repo.lock_client(client_name)
+        return 0
+
+    def release_all_locks(self, args):
+        '''Release global locks and client-specific lock'''
+        logging.info('Releasing global locks and client-specific lock')
+        with RepoAccessWrapper(self) as repo:
+            repo.unlock_everything()
+        return 0
+
+    def release_client_lock(self, args):
+        '''Release a specific client lock.'''
+
+        client_name = self.app.settings['client-name']
+        logging.info('Releasing client lock for %s', client_name)
+        with RepoAccessWrapper(self) as repo:
+            repo.unlock_client(client_name)
+        return 0
 
     def lock(self, args):
         '''Add locks to the repository.
