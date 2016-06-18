@@ -24,6 +24,24 @@ class RepositoryAccessError(obnamlib.ObnamError):
     msg = 'Repository does not exist or cannot be accessed: {error}'
 
 
+class RepoAccessWrapper(object):
+    def __init__(self, plugin):
+        self.plugin = plugin
+        self.repo = None
+
+    def __enter__(self):
+        self.plugin.app.settings.require('repository')
+        repourl = self.plugin.app.settings['repository']
+        logging.info('Repository: %s', repourl)
+        try:
+            self.repo = self.plugin.app.get_repository_object()
+        except OSError, e:
+            raise RepositoryAccessError(error=str(e))
+        return self.repo
+
+    def __exit__(self, type, value, traceback):
+        self.repo.close()
+
 class ForceLockPlugin(obnamlib.ObnamPlugin):
 
     def enable(self):
@@ -33,25 +51,12 @@ class ForceLockPlugin(obnamlib.ObnamPlugin):
     def force_lock(self, args):
         '''Force a locked repository to be open.'''
 
-        self.app.settings.require('repository')
-
-        repourl = self.app.settings['repository']
-        client_name = self.app.settings['client-name']
         logging.info('Forcing lock')
-        logging.info('Repository: %s', repourl)
-
-        try:
-            repo = self.app.get_repository_object()
-        except OSError, e:
-            raise RepositoryAccessError(error=str(e))
-
-        repo.force_client_list_lock()
-        for client_name in repo.get_client_names():
-            repo.force_client_lock(client_name)
-        repo.force_chunk_indexes_lock()
-
-        repo.close()
-
+        with RepoAccessWrapper(self) as repo:
+            repo.force_client_list_lock()
+            for client_name in repo.get_client_names():
+                repo.force_client_lock(client_name)
+            repo.force_chunk_indexes_lock()
         return 0
 
     def lock(self, args):
@@ -61,24 +66,13 @@ class ForceLockPlugin(obnamlib.ObnamPlugin):
 
         '''
 
-        self.app.settings.require('repository')
-
-        repourl = self.app.settings['repository']
         client_name = self.app.settings['client-name']
         logging.info('Creating lock')
-        logging.info('Repository: %s', repourl)
         logging.info('Client: %s', client_name)
-
-        try:
-            repo = self.app.get_repository_object()
-        except OSError, e:
-            raise RepositoryAccessError(error=str(e))
-
-        repo.lock_client_list()
-        if client_name:
-            repo.lock_client(client_name)
-        repo.lock_chunk_indexes()
-
-        repo.close()
+        with RepoAccessWrapper(self) as repo:
+            repo.lock_client_list()
+            if client_name:
+                repo.lock_client(client_name)
+            repo.lock_chunk_indexes()
 
         return 0
